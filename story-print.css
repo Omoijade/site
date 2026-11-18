@@ -88,3 +88,12 @@ details.more.big>summary{display:none}
 .gmk-wrap{grid-template-columns:repeat(3,1fr);gap:2mm}
 .gmk-out{font-size:7.8pt;padding:1.5mm 2.5mm}
 .story-index{display:none}
+.field,.morework{padding:0;background:#fff;border:0;break-before:page}
+.cards{gap:3mm;margin-top:4mm}
+.cards.c4{grid-template-columns:repeat(4,1fr)}.cards.c3{grid-template-columns:repeat(3,1fr)}
+.card{break-inside:avoid}
+.card img,.card .card-svg{max-height:32mm}
+.card .study,.card .idea{font-size:8pt}.card b{font-size:10.5pt!important}
+.cards.small .card img{display:none}
+.contact .pubs li{padding:.6mm 0;font-size:8pt}.bring li{font-size:11pt;padding:2mm 0 2mm 9mm}.bring li::before{top:3.5mm;width:3mm;height:3mm}.contact .foot{margin-top:3mm;font-size:7.5pt}.contact details .more-body p{font-size:8pt}
+.cards.small .card img,.cards.small .card .card-svg{display:block;max-height:26mm}

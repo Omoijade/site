@@ -18,7 +18,7 @@
   $$(".reveal").forEach(el => rio.observe(el));
 
   /* nav state */
-  const map = { learned: "learned", work: "work", daetox: "work", tipping: "work", vetsim: "work", agrifood: "work", room: "work", eklipse: "work", all: "all", contact: "contact" };
+  const map = { design: "design", timeline: "timeline", work: "work", mongolia: "work", bangladesh: "work", daetox: "work", chronilux: "work", tipping: "work", field: "work", more: "work", all: "all", contact: "contact" };
   const nio = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return; const k = map[e.target.id];
     $$(".top nav a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + k ? "true" : "false"));
@@ -104,30 +104,37 @@ document.querySelectorAll(".gmk-wrap").forEach(w => {
   }));
 });
 
-/* Timeline dots open a small card: what, when, status, reasoning aims */
+/* Timeline dots open a small card. Its link says where it goes; following it never pulls you back. */
 (function () {
   const W = window.WORKS || {}, box = document.querySelector(".timeline-wrap .wrap"); if (!box) return;
   const AIM = { tradeoffs: "Money and trade-offs", commons: "Sharing a limited resource", time: "Effects that take time", frame: "Whose view defines the problem", coop: "Working across sectors" };
-  const STORY = { daetox: "Territory game", tipping: "Tipping Point", vetsim: "Clinic simulator", agrifood: "Maps people draw", room: "Crisis budget game", eklipse: "Eklipse" };
   const card = document.createElement("div"); card.className = "dotcard"; card.hidden = true; card.setAttribute("role", "dialog"); card.setAttribute("aria-label", "Work details");
   box.appendChild(card);
   let last = null;
-  const close = () => { card.hidden = true; document.querySelectorAll(".tl-dot.sel").forEach(d => d.classList.remove("sel")); if (last) last.focus(); };
+  const hide = () => { card.hidden = true; document.querySelectorAll(".tl-dot.sel").forEach(d => d.classList.remove("sel")); };
+  const closeAndReturn = () => { hide(); if (last) last.focus({ preventScroll: true }); };
+  const flash = el => { if (!el) return; el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 2200); };
   document.querySelectorAll(".tl-dot").forEach(d => d.addEventListener("click", e => {
     e.preventDefault(); const w = W[d.dataset.id]; if (!w) return; last = d;
     document.querySelectorAll(".tl-dot.sel").forEach(x => x.classList.remove("sel")); d.classList.add("sel");
-    const go = w.case ? `<a class="dc-go" href="#${w.case}">Read the story: ${STORY[w.case]} →</a>` : `<a class="dc-go" href="#w-${d.dataset.id}" data-row="1">See it in the full list →</a>`;
+    const target = w.case ? "#" + w.case : "#w-" + d.dataset.id;
+    const label = w.group === "core" ? "Read the project →" : w.group === "other" || !w.case ? "See it in the full list →" : "Read the short summary →";
     card.innerHTML = `<button class="dc-x" aria-label="Close">×</button><div class="dc-when">${w.when} · ${w.fmt}</div><h4>${w.t}</h4><p>${w.line}</p>
-      <div class="dc-tags"><span class="st">${w.st}</span>${(w.aims || "").split(" ").filter(Boolean).map(a => `<span>${AIM[a]}</span>`).join("")}</div>${go}`;
+      <div class="dc-tags"><span class="st">${w.st}</span>${(w.aims || "").split(" ").filter(Boolean).map(a => `<span>${AIM[a]}</span>`).join("")}</div><a class="dc-go" href="${target}">${label}</a>`;
     const r = d.getBoundingClientRect(), b = box.getBoundingClientRect();
     card.hidden = false;
     let x = r.left - b.left + r.width / 2 - card.offsetWidth / 2; x = Math.max(0, Math.min(x, b.width - card.offsetWidth));
     card.style.left = x + "px"; card.style.top = (r.bottom - b.top + 10) + "px";
-    card.querySelector(".dc-x").addEventListener("click", close);
-    const row = card.querySelector("[data-row]");
-    if (row) row.addEventListener("click", ev => { ev.preventDefault(); document.getElementById("all-details").open = true; const tr = document.getElementById("w-" + d.dataset.id); if (tr) { tr.scrollIntoView({ block: "center" }); tr.classList.add("hl"); setTimeout(() => tr.classList.remove("hl"), 2500); } card.hidden = true; });
-    card.querySelector("a,button").focus({ preventScroll: true });
+    card.querySelector(".dc-x").addEventListener("click", closeAndReturn);
+    card.querySelector(".dc-go").addEventListener("click", ev => {
+      ev.preventDefault(); hide();
+      if (target.startsWith("#w-")) { const det = document.getElementById("all-details"); if (det) det.open = true; }
+      const el = document.querySelector(target); if (!el) return;
+      el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: target.startsWith("#w-") || target.includes("-") ? "center" : "start" });
+      history.replaceState(null, "", target); flash(el);
+    });
+    card.querySelector(".dc-go").focus({ preventScroll: true });
   }));
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && !card.hidden) close(); });
-  document.addEventListener("click", e => { if (!card.hidden && !card.contains(e.target) && !e.target.closest(".tl-dot")) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !card.hidden) closeAndReturn(); });
+  document.addEventListener("click", e => { if (!card.hidden && !card.contains(e.target) && !e.target.closest(".tl-dot")) hide(); });
 })();
