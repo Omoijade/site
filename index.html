@@ -1,683 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thomas-Julian Irabor — Serious game design &amp; systems-oriented research</title>
-<meta name="description" content="Thomas-Julian Irabor designs serious games and participatory field methods, and studies what participants can explain about complex health systems once a session ends.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --cream:      #F8F4EC;
-    --cream-2:    #EFEADC;
-    --sage:       #E7EBDC;
-    --ink:        #2B2A24;
-    --ink-soft:   #706F63;
-    --olive:      #5C6B4C;
-    --olive-deep: #47543A;
-    --line:       #DFD9C7;
-    --max: 760px;
-    --wide: 1080px;
-  }
-
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--cream);
-    color:var(--ink);
-    font-family:'Inter', -apple-system, sans-serif;
-    font-size:17px;
-    line-height:1.7;
-    -webkit-font-smoothing:antialiased;
-  }
-  ::selection{ background:var(--olive); color:var(--cream); }
-
-  h1,h2,h3{
-    font-family:'Manrope', sans-serif;
-    font-weight:600;
-    letter-spacing:-0.015em;
-    color:var(--ink);
-    margin:0;
-  }
-
-  a{ color:var(--olive-deep); text-decoration-color:rgba(92,107,76,0.4); text-underline-offset:3px; }
-  a:hover{ color:var(--ink); }
-
-  p{ margin:0 0 18px 0; color:var(--ink-soft); }
-  p:last-child{ margin-bottom:0; }
-
-  .eyebrow{
-    font-family:'Manrope', sans-serif;
-    font-size:13px;
-    font-weight:600;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--olive);
-  }
-
-  button{ font-family:inherit; cursor:pointer; }
-
-  /* ===== header ===== */
-  header{
-    position:sticky; top:0; z-index:30;
-    background:rgba(248,244,236,0.92);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);
-  }
-  .header-inner{
-    max-width:var(--wide); margin:0 auto;
-    padding:22px 32px;
-    display:flex; align-items:center; justify-content:space-between;
-  }
-  .header-inner .name{ font-family:'Manrope',sans-serif; font-weight:700; font-size:16px; }
-  nav{ display:flex; gap:28px; }
-  nav a{
-    color:var(--ink-soft); text-decoration:none;
-    font-family:'Manrope', sans-serif; font-size:14px; font-weight:500;
-    transition:color 0.2s ease;
-  }
-  nav a:hover{ color:var(--olive-deep); }
-
-  main{ position:relative; }
-
-  section{ padding:96px 32px; }
-  .inner{ max-width:var(--max); margin:0 auto; }
-  .inner.wide{ max-width:var(--wide); }
-  section.alt{ background:var(--sage); }
-
-  /* ===== hero ===== */
-  .hero{ padding-top:88px; padding-bottom:80px; text-align:left; }
-  .hero .inner{ max-width:var(--wide); }
-  .hero h1{
-    font-size:clamp(40px, 6vw, 66px);
-    line-height:1.06;
-    margin:22px 0 28px 0;
-    max-width:16ch;
-  }
-  .hero .thesis{
-    font-size:20px;
-    line-height:1.6;
-    color:var(--ink-soft);
-    max-width:42ch;
-    margin-bottom:30px;
-  }
-  .hero .meta-line{
-    font-size:14.5px; color:var(--ink-soft);
-    display:flex; gap:8px; flex-wrap:wrap;
-  }
-  .hero .meta-line .sep{ opacity:0.5; }
-
-  /* ===== three-up intro strip ===== */
-  .strip{
-    display:grid; grid-template-columns:repeat(3,1fr);
-    gap:36px; margin-top:56px;
-  }
-  .strip-item{ display:flex; flex-direction:column; gap:10px; cursor:default; }
-  .strip-item .ic{ width:30px; height:30px; transition:transform 0.35s ease; }
-  .strip-item:hover .ic{ transform:translateY(-3px) scale(1.06); }
-  .strip-item h3{ font-size:16.5px; }
-  .strip-item p{ font-size:14.5px; margin:0; }
-
-  @media (max-width:760px){
-    .strip{ grid-template-columns:1fr; gap:26px; }
-  }
-
-  /* ===== headings ===== */
-  .head-row{ margin-bottom:26px; }
-  .head-row h2{ font-size:clamp(24px,3vw,29px); margin-top:8px; }
-
-  .diss-title{
-    font-family:'Manrope', sans-serif; font-weight:500; font-style:normal;
-    font-size:18.5px; color:var(--olive-deep);
-    margin:-4px 0 24px 0; line-height:1.5;
-  }
-
-  .count{ font-variant-numeric: tabular-nums; }
-
-  /* ===== interactive architecture widget ===== */
-  .arch-widget{
-    margin:34px 0 36px 0;
-    background:var(--cream-2);
-    border-radius:16px;
-    padding:26px 26px 22px 26px;
-  }
-  section.alt .arch-widget{ background:#F6F3E9; }
-  .arch-tabs{
-    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-    margin-bottom:18px;
-  }
-  .arch-tab{
-    background:transparent; border:1.5px solid var(--line);
-    border-radius:999px; padding:9px 18px;
-    font-family:'Manrope',sans-serif; font-size:14.5px; font-weight:600;
-    color:var(--ink-soft);
-    transition:all 0.25s ease;
-  }
-  .arch-tab:hover{ border-color:var(--olive); color:var(--olive-deep); }
-  .arch-tab.active{ background:var(--olive); border-color:var(--olive); color:var(--cream); }
-  .arch-arrow{ color:var(--ink-soft); opacity:0.5; font-size:14px; }
-  @media (max-width:600px){ .arch-arrow{ display:none; } }
-
-  .arch-panel{ position:relative; min-height:64px; }
-  .arch-desc{
-    display:none; margin:0; font-size:16px; color:var(--ink);
-    animation:fadeUp 0.4s ease;
-  }
-  .arch-desc.active{ display:block; }
-  @keyframes fadeUp{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
-
-  .arch-progress{ height:2px; background:var(--line); border-radius:2px; margin-top:20px; overflow:hidden; }
-  .arch-progress-bar{ height:100%; width:0%; background:var(--olive); }
-  .arch-progress-bar.animating{ transition:width 5s linear; width:100%; }
-
-  /* ===== soft cards ===== */
-  .card-grid{
-    display:grid; grid-template-columns:repeat(2,1fr);
-    gap:16px; margin-top:8px;
-  }
-  @media (max-width:700px){ .card-grid{ grid-template-columns:1fr; } }
-
-  .card{
-    background:var(--cream-2);
-    border-radius:14px;
-    padding:22px 24px;
-    transition:transform 0.28s ease, box-shadow 0.28s ease;
-  }
-  .card:hover{ transform:translateY(-3px); box-shadow:0 10px 26px -14px rgba(43,42,36,0.28); }
-  section.alt .card{ background:#F6F3E9; }
-  .card .num{
-    font-family:'Manrope', sans-serif; font-size:12.5px; font-weight:600;
-    color:var(--olive); display:block; margin-bottom:8px;
-  }
-  .card h3{ font-size:17px; margin-bottom:7px; }
-  .card p{ font-size:14.5px; margin:0; }
-
-  .more{
-    max-height:0; overflow:hidden;
-    transition:max-height 0.4s ease, margin-top 0.4s ease;
-    font-size:14px; color:var(--ink-soft);
-  }
-  .more.open{ max-height:200px; margin-top:10px; }
-  .toggle-btn{
-    background:none; border:none; padding:0; margin-top:10px;
-    font-family:'Manrope',sans-serif; font-size:13px; font-weight:600;
-    color:var(--olive-deep); display:inline-flex; align-items:center; gap:5px;
-  }
-  .toggle-btn .chev{ transition:transform 0.3s ease; display:inline-block; }
-  .toggle-btn.open .chev{ transform:rotate(180deg); }
-
-  /* ===== flagship ===== */
-  .flagship{
-    background:var(--sage);
-    border-radius:16px;
-    padding:26px 28px;
-    margin:26px 0 30px 0;
-  }
-  .flagship h3{ font-size:19px; margin:6px 0 8px 0; }
-
-  /* ===== field grid ===== */
-  .field-grid{ display:grid; grid-template-columns:1fr 1fr; gap:34px 48px; }
-  @media (max-width:820px){ .field-grid{ grid-template-columns:1fr; } }
-  .field-block h3{ font-size:16px; margin-bottom:8px; color:var(--olive-deep); }
-  .field-block p{ font-size:15px; }
-
-  /* ===== musings ===== */
-  .musing{ padding:26px 0; border-top:1px solid var(--line); }
-  .musing:last-child{ border-bottom:1px solid var(--line); }
-  .musing .m-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:10px; flex-wrap:wrap; }
-  .musing h3{ font-size:18.5px; }
-  .musing .m-tag{ font-size:12.5px; color:var(--olive); font-weight:600; }
-  .musing p{ font-size:16px; }
-
-  /* ===== publications ===== */
-  .pub-filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
-  .pub-filter{
-    background:transparent; border:1.5px solid var(--line); border-radius:999px;
-    padding:7px 15px; font-family:'Manrope',sans-serif; font-size:13px; font-weight:600;
-    color:var(--ink-soft); transition:all 0.22s ease;
-  }
-  .pub-filter:hover{ border-color:var(--olive); }
-  .pub-filter.active{ background:var(--ink); border-color:var(--ink); color:var(--cream); }
-
-  .pub-list{ list-style:none; margin:0; padding:0; }
-  .pub-list li{
-    padding:16px 0; border-top:1px solid var(--line);
-    display:flex; justify-content:space-between; gap:20px; align-items:baseline;
-    font-size:15.5px; color:var(--ink);
-    transition:opacity 0.3s ease, max-height 0.3s ease;
-  }
-  .pub-list li:last-child{ border-bottom:1px solid var(--line); }
-  .pub-list li.hide{ display:none; }
-  .pub-list .venue{ font-size:13.5px; color:var(--ink-soft); white-space:nowrap; }
-  @media (max-width:600px){
-    .pub-list li{ flex-direction:column; gap:4px; }
-  }
-
-  /* ===== current ===== */
-  .current-list{ display:flex; flex-direction:column; gap:24px; margin-top:8px; }
-  .current-item{ display:grid; grid-template-columns:120px 1fr; gap:22px; }
-  @media (max-width:600px){ .current-item{ grid-template-columns:1fr; gap:6px; } }
-  .current-item .when{ font-size:13px; color:var(--olive); font-weight:600; padding-top:3px; }
-  .current-item h3{ font-size:16.5px; margin-bottom:6px; }
-  .current-item p{ font-size:14.5px; }
-
-  /* ===== contact ===== */
-  .contact-links{ display:flex; gap:28px; flex-wrap:wrap; margin-top:20px; font-size:15px; }
-  footer{
-    padding:36px 32px 44px 32px;
-    text-align:left;
-  }
-  .foot-inner{ max-width:var(--wide); margin:0 auto; }
-  .foot-meta{ font-size:13px; color:var(--ink-soft); margin-top:10px; }
-
-  [data-reveal]{ opacity:0; transform:translateY(14px); transition:opacity 0.6s ease, transform 0.6s ease; }
-  [data-reveal].in{ opacity:1; transform:translateY(0); }
-
-  [data-stagger]{ opacity:0; transform:translateY(10px); transition:opacity 0.5s ease, transform 0.5s ease; }
-  [data-stagger].in{ opacity:1; transform:translateY(0); }
-
-  @media (prefers-reduced-motion: reduce){
-    html{ scroll-behavior:auto; }
-    [data-reveal], [data-stagger]{ opacity:1; transform:none; transition:none; }
-    .card:hover{ transform:none; }
-    .strip-item:hover .ic{ transform:none; }
-    .arch-desc{ animation:none; }
-  }
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thomas-Julian Irabor · Serious games and policy simulations</title>
+<meta name="description" content="Thomas-Julian Irabor, DVM, PhD: serious games and policy simulations for One Health, agrifood systems and public health, 2020–2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="story.css">
+<link rel="stylesheet" href="story-print.css" media="print">
+<script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
+<a class="skip" href="#design">Skip to content</a>
+<div class="progress" aria-hidden="true"><span id="bar"></span></div>
 
-<header>
-  <div class="header-inner">
-    <div class="name">Thomas-Julian Irabor</div>
-    <nav>
-      <a href="#research">Research</a>
-      <a href="#design">Design</a>
-      <a href="#field">Field work</a>
-      <a href="#musings">Musings</a>
-      <a href="#publications">Publications</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </div>
+<header class="top">
+ <a href="#top" class="name">Thomas-Julian Irabor</a>
+ <nav aria-label="Sections">
+  <a href="#design">How I design</a><a href="#timeline">Timeline</a><a href="#work">Work</a><a href="#all">Everything</a><a href="#contact">Contact</a>
+ </nav>
 </header>
 
-<main>
+<main id="top">
 
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="inner wide">
-      <span class="eyebrow">Doctoral researcher · Serious game designer · University of Liège</span>
-      <h1>Games and field methods for thinking about complex health systems</h1>
-      <p class="thesis">I design games and participatory sessions that make group reasoning about complex systems visible, then study what that reasoning contains.</p>
-      <div class="meta-line">
-        <span>Liège, Belgium</span><span class="sep">·</span>
-        <span>English &amp; Français</span><span class="sep">·</span>
-        <span>FARAH, Faculty of Veterinary Medicine</span>
-      </div>
+<!-- ========== HOOK ========== -->
+<section class="hero wrap">
+ <div class="hero-text">
+  <p class="eyebrow">Serious games and policy simulations · One Health · agrifood · public health</p>
+  <h1>Games that help people see how a problem fits together, <em>and decide what to do about it.</em></h1>
+  <p class="hero-sub">Veterinarian and PhD candidate in public health. Since 2020 I have designed games for farmers, officials, health workers and students in ten countries.</p>
+  <div class="hero-cta"><a class="btn solid" href="#work">See the work</a><a class="btn" href="#contact">Contact</a></div>
+ </div>
+ <figure class="hero-img"><img src="tp_play.jpg" alt="Students lean over a table placing pieces on the Tipping Point island, with me on the left, at ULB in Brussels" fetchpriority="high"><figcaption>Me (left) running Tipping Point in an environmental health course at ULB, Brussels</figcaption></figure>
+</section>
 
-      <div class="strip">
-        <div class="strip-item">
-          <svg class="ic" viewBox="0 0 32 32" fill="none"><path d="M16 4 L26 10 L26 22 L16 28 L6 22 L6 10 Z" stroke="#5C6B4C" stroke-width="1.6"/><circle cx="16" cy="16" r="3.5" stroke="#5C6B4C" stroke-width="1.6"/></svg>
-          <h3>Research</h3>
-          <p>Six cases, 2020–2024, on what participants can explain about systems after playing.</p>
-        </div>
-        <div class="strip-item">
-          <svg class="ic" viewBox="0 0 32 32" fill="none"><rect x="6" y="6" width="9" height="9" rx="1.5" stroke="#5C6B4C" stroke-width="1.6"/><rect x="17" y="17" width="9" height="9" rx="1.5" stroke="#5C6B4C" stroke-width="1.6"/><path d="M15 10.5 H21 V17" stroke="#5C6B4C" stroke-width="1.6" fill="none"/></svg>
-          <h3>Design</h3>
-          <p>Games structured around an artefact, a friction, and a space to reconstruct.</p>
-        </div>
-        <div class="strip-item">
-          <svg class="ic" viewBox="0 0 32 32" fill="none"><path d="M16 4 C22 10 24 15 24 19 A8 8 0 0 1 8 19 C8 15 10 10 16 4Z" stroke="#5C6B4C" stroke-width="1.6"/></svg>
-          <h3>Field work</h3>
-          <p>Sessions and evaluations run across Nigeria, Mongolia, Bangladesh, and Uganda.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="numbers wrap" aria-label="In numbers">
+ <div><b>29</b><span>games, simulations and tools since 2020</span></div>
+ <div><b>472</b><span>players in my PhD research</span></div>
+ <div><b>10</b><span>countries where the work is played</span></div>
+ <div><b>2</b><span>languages: English and French</span></div>
+</section>
 
-  <!-- ============ ABOUT ============ -->
-  <section id="about" data-reveal>
-    <div class="inner">
-      <p style="font-size:18.5px; color:var(--ink);">Thomas-Julian Irabor, known as Julian, holds a degree in veterinary medicine from the University of Ibadan, a Master of Specialisation in Integrated Management of Health Risks from the University of Liège, and a certificate in game culture from the same university. He is completing a doctorate at the Faculty of Veterinary Medicine, based in FARAH (Fundamental and Applied Research for Animals and Health), under the supervision of Nicolas Antoine-Moussiaux. He works within One Health, an approach that treats human, animal, and environmental health as interdependent, and designs games and participatory field methods to study what participants can explain about complex systems once a session ends. He works in English and French, and has run sessions and field studies in Belgium, Nigeria, Bangladesh, Mongolia, and Uganda.</p>
-    </div>
-  </section>
-
-  <!-- ============ RESEARCH ============ -->
-  <section id="research" class="alt" data-reveal>
-    <div class="inner">
-      <div class="head-row">
-        <span class="eyebrow">Doctoral research · 2020–2026</span>
-        <h2>The dissertation</h2>
-      </div>
-      <p class="diss-title">"After the game: conditions of play and systems-oriented explanation in public health and One Health education"</p>
-
-      <p>The research asks how serious games and participatory activities, used as learning environments, shape what participants make explicit as systems-oriented reasoning once the activity ends. Six cases, run between 2020 and 2024 with <span class="count" data-target="514">0</span> adult participants across community, university, veterinary, medical, public health, and One Health settings, are compared through a Context-Mechanism-Outcome (CMO) lens: the setting each activity ran in, what made explanation possible inside it, and what participants could then say about the system they had engaged with.</p>
-
-      <p>Three conditions recur across the six cases.</p>
-
-      <div class="arch-widget">
-        <div class="arch-tabs" role="tablist" aria-label="Three conditions of the dissertation architecture">
-          <button class="arch-tab active" data-key="artefact" role="tab" aria-selected="true">Artefact</button>
-          <span class="arch-arrow">→</span>
-          <button class="arch-tab" data-key="friction" role="tab" aria-selected="false">Friction</button>
-          <span class="arch-arrow">→</span>
-          <button class="arch-tab" data-key="reconstruction" role="tab" aria-selected="false">Reconstruction</button>
-        </div>
-        <div class="arch-panel">
-          <p class="arch-desc active" data-panel="artefact">A shared artefact is an object or exercise participants can point to and build on. It differs by authorship: it can be encoded in the design, assembled by participants, or made during play.</p>
-          <p class="arch-desc" data-panel="friction">Friction is a source of resistance participants encounter. It reaches them from three directions: placed by the design, arising from how the activity is used, or brought in by the participants themselves.</p>
-          <p class="arch-desc" data-panel="reconstruction">A reconstruction space is a moment set aside for participants to work back through what happened. What it asks decides what the reasoning reaches — the same artefact and friction can lead to different explanations depending on the prompt.</p>
-        </div>
-        <div class="arch-progress"><div class="arch-progress-bar"></div></div>
-      </div>
-
-      <p>Each condition is necessary on its own. None is sufficient alone.</p>
-
-      <div class="card-grid">
-        <div class="card" data-stagger>
-          <span class="num">Case 01</span><h3>Pandemic</h3><p>Mixed disciplines, four cohorts.</p>
-          <div class="more"><p>Published as a serious game on the 4Cs of One Health under pressure, in Scientific Reports, 2026. Compared against Tipping Point, the difference between the two cases turns on which relationship became the group's shared object.</p></div>
-          <button class="toggle-btn" data-toggle data-label="More">More <span class="chev">▾</span></button>
-        </div>
-        <div class="card" data-stagger>
-          <span class="num">Case 02</span><h3>Ibadan mapping</h3><p>Twelve community members, one session.</p>
-          <div class="more"><p>Part of a water, sanitation, and hygiene (WASH) co-design published in One Health Cases, 2023.</p></div>
-          <button class="toggle-btn" data-toggle data-label="More">More <span class="chev">▾</span></button>
-        </div>
-        <div class="card" data-stagger>
-          <span class="num">Case 03</span><h3>Territory Game</h3><p>156 veterinary students, 88 written responses.</p>
-          <div class="more"><p>The case that resists the general reading: all three conditions were present, and the explanation participants gave stayed with the activity itself, because the reconstruction prompts asked about the activity.</p></div>
-          <button class="toggle-btn" data-toggle data-label="More">More <span class="chev">▾</span></button>
-        </div>
-        <div class="card" data-stagger>
-          <span class="num">Case 04</span><h3>Tipping Point</h3><p>Five cohorts, three sessions each.</p>
-          <div class="more"><p>The flagship, most fully evaluated case in the comparison, played by more than 450 participants.</p></div>
-          <button class="toggle-btn" data-toggle data-label="More">More <span class="chev">▾</span></button>
-        </div>
-        <div class="card" data-stagger>
-          <span class="num">Case 05</span><h3>Micro-warrior</h3><p>42 students in focus groups, five universities.</p>
-          <div class="more"><p>The artefact here was availability rather than an object: scenes participants remembered from the game, assembled after the fact through discussion.</p></div>
-          <button class="toggle-btn" data-toggle data-label="More">More <span class="chev">▾</span></button>
-        </div>
-        <div class="card" data-stagger>
-          <span class="num">Case 06</span><h3>Avian Game</h3><p>74 veterinary students.</p>
-          <div class="more"><p>One of two veterinary-student cases in the comparison, alongside Territory Game.</p></div>
-          <button class="toggle-btn" data-toggle data-label="More">More <span class="chev">▾</span></button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ DESIGN PRACTICE ============ -->
-  <section id="design" data-reveal>
-    <div class="inner">
-      <div class="head-row">
-        <span class="eyebrow">Design practice</span>
-        <h2>Games</h2>
-      </div>
-      <p>Alongside the dissertation, Julian designs and tests games built on the same three conditions: artefact, friction, and reconstruction space.</p>
-
-      <div class="flagship">
-        <span class="eyebrow">Flagship</span>
-        <h3>Tipping Point</h3>
-        <p>Developed with a full facilitation process, a physical prototype, and a digital adaptation, and played by more than <span class="count" data-target="450">0</span> participants. A mixed-method study of 70 of them appeared in <em>Humanities and Social Sciences Communications</em> in 2025.</p>
-      </div>
-
-      <div class="flagship">
-        <h3>Veterinary clinic simulation</h3>
-        <p>A management simulation paired with a five-day pedagogical module at the University of Liège, built around Ainsworth's DeFT framework for multiple external representations. The module runs Monday to Friday, scaffolding systems thinking across the week alongside the simulation itself.</p>
-      </div>
-
-      <p>A new prototype, still in design, tests the same three conditions against land-use trade-offs between farming, conservation, and public health.</p>
-    </div>
-  </section>
-
-  <!-- ============ FIELD WORK ============ -->
-  <section id="field" class="alt" data-reveal>
-    <div class="inner wide">
-      <div class="head-row">
-        <span class="eyebrow">Field and collaborative work</span>
-        <h2>Where the work has run</h2>
-      </div>
-
-      <div class="field-grid">
-        <div class="field-block">
-          <h3>Nigeria</h3>
-          <p>A case study for CABI's <em>One Health Cases</em> on a youth-led antimicrobial resistance (AMR) mapping exercise, run by the AMR Club at Ladoke Akintola University of Technology during World AMR Awareness Week 2025. Thirty-seven student volunteers mapped 74 risk points across campus and built a public mural and digital exhibit from the results. A parallel exercise, run independently, produced comparable results at the University of Nigeria, Nsukka.</p>
-        </div>
-        <div class="field-block">
-          <h3>Mongolia</h3>
-          <p>An international training of trainers on One Health under the Resilient Threads programme, run with the Odyssey Conservation Trust, the Sustainable Fibre Alliance, the Royal Veterinary College, the University of Liège, and the Government of Mongolia, covering herder livelihoods, livestock health, wildlife, rangeland condition, climate pressure, food security, and the cashmere supply chain.</p>
-        </div>
-        <div class="field-block">
-          <h3>Bangladesh</h3>
-          <p>Working with FRIENDSHIP Bangladesh and FRIENDSHIP Luxembourg, training local facilitators in social mapping, timeline construction, and proportional piling, a method for ranking priorities with counters, for an evaluation covering <span class="count" data-target="6000">0</span> families across 198 climate-vulnerable communities. The analysis fed an independent University of Liège evaluation and a policy brief.</p>
-        </div>
-        <div class="field-block">
-          <h3>Uganda</h3>
-          <p>Design and evaluation of a digital narrative game on antimicrobial stewardship, built with medical and nursing students from five Ugandan universities.</p>
-        </div>
-      </div>
-
-      <p style="margin-top:34px;">He has also contributed the qualitative data analysis to multi-author policy studies on rabies prioritisation in Burkina Faso, avian influenza decision-making in Ivory Coast, zoonotic disease data sharing in Senegal, and rabies coordination in the Philippines.</p>
-    </div>
-  </section>
-
-  <!-- ============ MUSINGS ============ -->
-  <section id="musings" data-reveal>
-    <div class="inner">
-      <div class="head-row">
-        <span class="eyebrow">Musings</span>
-        <h2>Notes along the way</h2>
-      </div>
-      <div class="musing">
-        <div class="m-head"><h3>On tracking less</h3><span class="m-tag">Design note</span></div>
-        <p>Early drafts of The Visit tracked everything: capacity units, demand types, a running tally after each round. Play slowed to bookkeeping. I removed the trackers and asked players to say out loud what they were short on. Interdependence stopped being a number on a sheet and became a conversation between roles. A tracker automates a judgment a person should make out loud.</p>
-      </div>
-
-      <div class="musing">
-        <div class="m-head"><h3>What counts as an artefact</h3><span class="m-tag">Field note</span></div>
-        <p>Micro-warrior's focus groups worked from an artefact that never sat on the table: scenes participants remembered from the game itself, assembled after the fact through discussion. An artefact does not need to be an object placed in front of a group. It needs to be available, something participants can return to and build on together.</p>
-      </div>
-
-      <div class="musing">
-        <div class="m-head"><h3>The case that didn't fit</h3><span class="m-tag">Research note</span></div>
-        <p>Territory Game sat inside the same architecture as the other five cases: a shared artefact, friction, a space set aside to reconstruct. The explanation participants gave still stayed with the activity itself, and the reasoning stopped there. The reconstruction prompts had asked about the activity. What a debrief asks decides what a group can say.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PUBLICATIONS ============ -->
-  <section id="publications" class="alt" data-reveal>
-    <div class="inner">
-      <div class="head-row">
-        <span class="eyebrow">Publications</span>
-        <h2>Peer-reviewed record</h2>
-      </div>
-
-      <div class="pub-filters" role="tablist" aria-label="Filter publications by area">
-        <button class="pub-filter active" data-filter="all">All</button>
-        <button class="pub-filter" data-filter="games">Serious games</button>
-        <button class="pub-filter" data-filter="one-health">One Health</button>
-        <button class="pub-filter" data-filter="policy">Policy</button>
-      </div>
-
-      <ul class="pub-list">
-        <li data-cat="games"><span>Tipping Point, a One Health serious game: mixed-method evaluation</span><span class="venue">Humanities &amp; Social Sciences Communications, 2025</span></li>
-        <li data-cat="games"><span>Serious game design in veterinary education</span><span class="venue">Journal of Veterinary Medical Education, 2023</span></li>
-        <li data-cat="games"><span>Serious game work in veterinary practice contexts</span><span class="venue">Irish Veterinary Journal, 2025</span></li>
-        <li data-cat="games"><span>Pandemic, a serious game on the 4Cs of One Health under pressure</span><span class="venue">Scientific Reports, 2026</span></li>
-        <li data-cat="one-health"><span>One Health education</span><span class="venue">Sustainability Science, 2022</span></li>
-        <li data-cat="policy"><span>Rabies multi-criteria prioritisation in Burkina Faso</span><span class="venue">BMC Public Health, 2025</span></li>
-        <li data-cat="policy"><span>Highly pathogenic avian influenza decision-maker analysis in Ivory Coast, using Checkland's soft systems methodology</span><span class="venue">One Health Cases, 2024</span></li>
-        <li data-cat="policy"><span>Zoonotic disease data sharing in Senegal</span><span class="venue">Frontiers in Veterinary Science, 2026</span></li>
-        <li data-cat="policy"><span>Rabies coordination in Maramag, Philippines</span><span class="venue">One Health Cases, 2025</span></li>
-        <li data-cat="one-health"><span>Water, sanitation, and hygiene co-design in Ibadan, Nigeria</span><span class="venue">One Health Cases, 2023</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============ CURRENT ============ -->
-  <section id="current" data-reveal>
-    <div class="inner">
-      <div class="head-row">
-        <span class="eyebrow">Current</span>
-        <h2>Right now</h2>
-      </div>
-      <p>Julian co-chairs the ECLIPSE Expert Working Group with Claude Garcia and Agnessa Spanellis, on games connecting science and policy for biodiversity and conservation decisions, within the EcoGames project led by the University of Stirling and King's College London, running from September to December 2026 with a possible extension to March 2027.</p>
-      <p>In September 2026 he presents a poster at the 9th World One Health Congress in Lisbon, co-authored with Nicolas Antoine-Moussiaux: "Towards a design framework for systems thinking in One Health education."</p>
-    </div>
-  </section>
-
-  <!-- ============ CONTACT ============ -->
-  <section id="contact" class="alt" data-reveal>
-    <div class="inner">
-      <span class="eyebrow">Get in touch</span>
-      <h2 style="margin-top:14px;">Contact</h2>
-      <p style="margin-top:16px;">For collaboration on serious game design, participatory field methods, or One Health education, write directly.</p>
-      <div class="contact-links">
-        <a href="mailto:tjirabor@uliege.be">tjirabor@uliege.be</a>
-        <a href="https://www.linkedin.com/in/irabor/" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <div class="foot-inner">
-    <div class="foot-meta">Thomas-Julian Irabor — FARAH, Faculty of Veterinary Medicine, University of Liège</div>
+<!-- ========== HOW I DESIGN ========== -->
+<section class="design" id="design">
+ <div class="wrap">
+  <p class="eyebrow">How I think about design</p>
+  <h2 class="reveal">I start from what I want players to understand, and build it into the rules of the game.</h2>
+  <p class="lead reveal">If players need to understand both the money side of a farm and what it means for the families who run it, I write the rules so that they can only do well by weighing both. That thinking then shows in the choices they make, and the discussion after the game helps them put it into words.</p>
+  <ol class="chain big reveal" aria-label="The design chain">
+   <li class="s1"><span>1</span><b>The goal</b><small>what players should understand</small></li>
+   <li class="s2"><span>2</span><b>The rules</b><small>how the game makes them think about it</small></li>
+   <li class="s3"><span>3</span><b>What happened</b><small>what players actually did</small></li>
+   <li class="s4"><span>4</span><b>The discussion after</b><small>putting it into words, so it carries over to real decisions</small></li>
+  </ol>
+  <div class="tryit reveal" id="tryit">
+   <h3>Try it: choose what players should understand</h3>
+   <div class="aims" role="tablist" aria-label="What players should understand">
+    <button role="tab" aria-selected="false" data-k="tradeoffs">Money and trade-offs</button>
+    <button role="tab" aria-selected="false" data-k="commons">Sharing a limited resource</button>
+    <button role="tab" aria-selected="false" data-k="time">Effects that take time</button>
+    <button role="tab" aria-selected="true" data-k="frame">Whose view defines the problem</button>
+    <button role="tab" aria-selected="false" data-k="coop">Working across sectors</button>
+   </div>
+   <div class="try-panels">
+    <div class="try-panel" role="tabpanel" data-k="tradeoffs"><h4>Money and trade-offs</h4><dl><div><dt>Rule to build in</dt><dd>A fixed budget with a price on every option, so each choice costs another.</dd></div><div><dt>What players then do</dt><dd>argue about what to give up, and why.</dd></div><div><dt>Where I did this</dt><dd><a href="#vetsim">Clinic simulator</a> · <a href="#room">Crisis game for a lecture hall</a></dd></div></dl></div>
+    <div class="try-panel" role="tabpanel" data-k="commons"><h4>Sharing a limited resource</h4><dl><div><dt>Rule to build in</dt><dd>One resource that everyone uses, which runs down quickly and recovers slowly.</dd></div><div><dt>What players then do</dt><dd>see their own gains become a cost for everyone.</dd></div><div><dt>Where I did this</dt><dd><a href="#tipping">Tipping Point</a></dd></div></dl></div>
+    <div class="try-panel" role="tabpanel" data-k="time"><h4>Effects that take time</h4><dl><div><dt>Rule to build in</dt><dd>Some actions pay off at once, others only later, and results carry over from round to round.</dd></div><div><dt>What players then do</dt><dd>spot the delay and change course in the next round.</dd></div><div><dt>Where I did this</dt><dd><a href="#room">Crisis game for a lecture hall</a> · <a href="#tipping">Tipping Point</a></dd></div></dl></div>
+    <div class="try-panel" role="tabpanel" data-k="frame"><h4>Whose view defines the problem</h4><dl><div><dt>Rule to build in</dt><dd>Information has a price, and each team can only afford part of it.</dd></div><div><dt>What players then do</dt><dd>find that what they chose to look at shaped their answer.</dd></div><div><dt>Where I did this</dt><dd><a href="#daetox">Territory game</a> · <a href="#agrifood">Maps people draw</a></dd></div></dl></div>
+    <div class="try-panel" role="tabpanel" data-k="coop"><h4>Working across sectors</h4><dl><div><dt>Rule to build in</dt><dd>Each team holds only some of the money and skills, so most actions need two or more teams.</dd></div><div><dt>What players then do</dt><dd>negotiate who is responsible, and who pays.</dd></div><div><dt>Where I did this</dt><dd><a href="#daetox">Territory game</a> · <a href="#tipping">the teamwork seminar</a></dd></div></dl></div>
+   </div>
   </div>
-</footer>
+  <p class="lead small reveal">Each project below is told in these steps.</p>
+ </div>
+</section>
 
-<script>
-  /* scroll reveal */
-  const revealEls = document.querySelectorAll('[data-reveal]');
-  const staggerEls = document.querySelectorAll('[data-stagger]');
-  if('IntersectionObserver' in window){
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-      });
-    }, {threshold:0.06});
-    revealEls.forEach(el=>io.observe(el));
+<!-- ========== TIMELINE + FILTER ========== -->
+<section class="timeline-wrap" id="timeline" aria-labelledby="tl-h">
+ <div class="wrap">
+  <h2 id="tl-h" class="small-h">Six years of work, at a glance</h2>
+  <p class="hint">Each dot is one game or tool: select it to read more. Choose a goal to highlight the games built for it; choose it again, or "Show all", to go back.</p>
+  <div class="aims" role="group" aria-label="Filter by goal"><span class="aims-label">Show games built for:</span>
+   <button aria-pressed="true" data-aim="all">All</button>
+   <button aria-pressed="false" data-aim="tradeoffs">Money and trade-offs</button>
+   <button aria-pressed="false" data-aim="commons">Sharing a limited resource</button>
+   <button aria-pressed="false" data-aim="time">Effects that take time</button>
+   <button aria-pressed="false" data-aim="frame">Whose view defines the problem</button>
+   <button aria-pressed="false" data-aim="coop">Working across sectors</button>
+   <span class="aim-status" aria-live="polite"><output id="aim-count" class="aim-count"></output><button type="button" class="aim-clear" id="aim-clear" hidden>Show all ×</button></span>
+  </div>
+  <div class="tl-box"><svg class="tl" viewBox="0 70 1200 330" role="img" aria-labelledby="tl-t"><title id="tl-t">Timeline of 29 games, simulations and tools, 2020 to 2026, coloured by case.</title><polygon class="tl-axis" points="40,289 1150,286 1150,294 40,291"/><circle cx="1162" cy="290" r="10" fill="var(--arrive)"/><text class="tl-now" x="1162" y="268" text-anchor="middle">now</text><text class="tl-yr" x="80" y="326" text-anchor="middle">2016</text><text class="tl-mile" x="80" y="348" text-anchor="middle">vet degree, Ibadan</text><text class="tl-gap" x="122" y="296" text-anchor="middle">· · ·</text><line x1="160" y1="282" x2="160" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="229.0" y="326" text-anchor="middle">2020</text><line x1="298" y1="282" x2="298" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="367.0" y="326" text-anchor="middle">2021</text><line x1="436" y1="282" x2="436" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="505.0" y="326" text-anchor="middle">2022</text><line x1="574" y1="282" x2="574" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="643.0" y="326" text-anchor="middle">2023</text><line x1="712" y1="282" x2="712" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="781.0" y="326" text-anchor="middle">2024</text><line x1="850" y1="282" x2="850" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="919.0" y="326" text-anchor="middle">2025</text><line x1="988" y1="282" x2="988" y2="298" stroke="var(--faint)"/><text class="tl-yr" x="1057.0" y="326" text-anchor="middle">2026</text><text class="tl-mile" x="229.0" y="348" text-anchor="middle">One Health master’s</text><path d="M308,358 v8 H1116 v-8" fill="none" stroke="var(--faint)"/><text class="tl-mile" x="712.0" y="384" text-anchor="middle">PhD, After the game: six of these games studied with 472 players</text><a href="#tipping" class="tl-dot" data-id="pandemic" data-case="tipping" data-aims="coop time" aria-label="One Health teamwork seminar (Pandemic), 2020–2023"><title>One Health teamwork seminar (Pandemic) · 2020–2023</title><circle cx="189" cy="252" r="14" fill="#B5523B" stroke="var(--paper)" stroke-width="2"/></a><a href="#tipping" class="tl-dot" data-id="ibadan" data-case="tipping" data-aims="frame coop" aria-label="Ibadan compound mapping, 2021"><title>Ibadan compound mapping · 2021</title><circle cx="327" cy="252" r="14" fill="#B5523B" stroke="var(--paper)" stroke-width="2"/></a><a href="#tipping" class="tl-dot" data-id="territory" data-case="tipping" data-aims="coop frame" aria-label="Territory Game, 2021–2025"><title>Territory Game · 2021–2025</title><circle cx="367" cy="252" r="14" fill="#B5523B" stroke="var(--paper)" stroke-width="2"/></a><a href="#tipping" class="tl-dot" data-id="tipping" data-case="tipping" data-aims="commons time" aria-label="Tipping Point, 2022–now"><title>Tipping Point · 2022–now</title><circle cx="465" cy="252" r="19" fill="none" stroke="#B5523B" stroke-width="1.5" opacity=".55"/><circle cx="465" cy="252" r="14" fill="#B5523B" stroke="var(--paper)" stroke-width="2"/></a><a href="#tipping" class="tl-dot" data-id="poultry" data-case="tipping" data-aims="frame" aria-label="Backyard poultry game, 2023–2025"><title>Backyard poultry game · 2023–2025</title><circle cx="603" cy="252" r="14" fill="#B5523B" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-bizgame" class="tl-dot" data-id="bizgame" data-case="" data-aims="tradeoffs" aria-label="Veterinary business game, 2023–now"><title>Veterinary business game · 2023–now</title><circle cx="643" cy="252" r="14" fill="var(--dot)" stroke="var(--paper)" stroke-width="2"/></a><a href="#tipping" class="tl-dot" data-id="microwarrior" data-case="tipping" data-aims="time frame" aria-label="Micro-warrior, AMR narrative game, Aug–Dec 2024"><title>Micro-warrior, AMR narrative game · Aug–Dec 2024</title><circle cx="741" cy="252" r="14" fill="#B5523B" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-chronilux" class="tl-dot" data-id="chronilux" data-case="" data-aims="coop" aria-label="Chronilux, 2024–Jan 2025"><title>Chronilux · 2024–Jan 2025</title><circle cx="781" cy="252" r="14" fill="var(--dot)" stroke="var(--paper)" stroke-width="2"/></a><a href="#agrifood" class="tl-dot" data-id="amrcampus" data-case="agrifood" data-aims="frame" aria-label="AMR Connect Campus, Nov 2025–now"><title>AMR Connect Campus · Nov 2025–now</title><circle cx="879" cy="252" r="19" fill="none" stroke="#5E7D2E" stroke-width="1.5" opacity=".55"/><circle cx="879" cy="252" r="14" fill="#5E7D2E" stroke="var(--paper)" stroke-width="2"/></a><a href="#agrifood" class="tl-dot" data-id="kinshasa" data-case="agrifood" data-aims="frame tradeoffs" aria-label="Territory mapping game, Kinshasa, 15 Dec 2025"><title>Territory mapping game, Kinshasa · 15 Dec 2025</title><circle cx="919" cy="252" r="14" fill="#5E7D2E" stroke="var(--paper)" stroke-width="2"/></a><a href="#agrifood" class="tl-dot" data-id="smoke" data-case="agrifood" data-aims="tradeoffs" aria-label="Smoke Smarter, Oct 2025–now"><title>Smoke Smarter · Oct 2025–now</title><circle cx="959" cy="252" r="14" fill="#5E7D2E" stroke="var(--paper)" stroke-width="2"/></a><a href="#agrifood" class="tl-dot" data-id="muls" data-case="agrifood" data-aims="commons frame" aria-label="One Health training, Mongolia, 2025–now"><title>One Health training, Mongolia · 2025–now</title><circle cx="879" cy="212" r="19" fill="none" stroke="#5E7D2E" stroke-width="1.5" opacity=".55"/><circle cx="879" cy="212" r="14" fill="#5E7D2E" stroke="var(--paper)" stroke-width="2"/></a><a href="#room" class="tl-dot" data-id="budget" data-case="room" data-aims="tradeoffs time" aria-label="Budget de confiance, 21 Nov 2025"><title>Budget de confiance · 21 Nov 2025</title><circle cx="919" cy="212" r="14" fill="#2F5BA0" stroke="var(--paper)" stroke-width="2"/></a><a href="#vetsim" class="tl-dot" data-id="vetsim" data-case="vetsim" data-aims="tradeoffs time" aria-label="Clinic simulator and guided week, 2025–now; first run 19–23 Oct 2026"><title>Clinic simulator and guided week · 2025–now; first run 19–23 Oct 2026</title><circle cx="959" cy="212" r="19" fill="none" stroke="#5F5290" stroke-width="1.5" opacity=".55"/><circle cx="959" cy="212" r="14" fill="#5F5290" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-octopus" class="tl-dot" data-id="octopus" data-case="" data-aims="frame coop" aria-label="GP shortage, Province de Hainaut, Jan 2025–Nov 2026"><title>GP shortage, Province de Hainaut · Jan 2025–Nov 2026</title><circle cx="879" cy="172" r="14" fill="var(--dot)" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-moosg" class="tl-dot" data-id="moosg" data-case="" data-aims="coop" aria-label="Hôpital Ngolo, neonatal sepsis, 2025"><title>Hôpital Ngolo, neonatal sepsis · 2025</title><circle cx="919" cy="172" r="14" fill="var(--dot)" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-codecritical" class="tl-dot" data-id="codecritical" data-case="" data-aims="time tradeoffs" aria-label="Code Critical, 2025"><title>Code Critical · 2025</title><circle cx="959" cy="172" r="14" fill="var(--dot)" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-decision" class="tl-dot" data-id="decision" data-case="" data-aims="tradeoffs" aria-label="Decision Rehearsal Workshops, Dec 2025"><title>Decision Rehearsal Workshops · Dec 2025</title><circle cx="879" cy="132" r="14" fill="var(--paper)" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 2.5"/></a><a href="#w-miro" class="tl-dot" data-id="miro" data-case="" data-aims="coop" aria-label="Time, Place, Permission (Miro), Nov 2025"><title>Time, Place, Permission (Miro) · Nov 2025</title><circle cx="919" cy="132" r="14" fill="var(--paper)" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 2.5"/></a><a href="#w-flow" class="tl-dot" data-id="flow" data-case="" data-aims="time" aria-label="Close the Gap · Eight Rounds to Breathe, Nov 2025"><title>Close the Gap · Eight Rounds to Breathe · Nov 2025</title><circle cx="959" cy="132" r="14" fill="var(--paper)" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 2.5"/></a><a href="#agrifood" class="tl-dot" data-id="fishpar" data-case="agrifood" data-aims="frame" aria-label="Fish parasites territory workshop, Jan 2026"><title>Fish parasites territory workshop · Jan 2026</title><circle cx="1017" cy="252" r="14" fill="#5E7D2E" stroke="var(--paper)" stroke-width="2"/></a><a href="#agrifood" class="tl-dot" data-id="ferme" data-case="agrifood" data-aims="tradeoffs commons" aria-label="La ferme du Thier, Oct 2026"><title>La ferme du Thier · Oct 2026</title><circle cx="1057" cy="252" r="14" fill="var(--paper)" stroke="#5E7D2E" stroke-width="2" stroke-dasharray="3 2.5"/></a><a href="#daetox" class="tl-dot" data-id="daetox" data-case="daetox" data-aims="frame coop" aria-label="One Health territory game, DAETOX / TISS, Aug–Nov 2026; run in Senegal, Nov 2026"><title>One Health territory game, DAETOX / TISS · Aug–Nov 2026; run in Senegal, Nov 2026</title><circle cx="1097" cy="252" r="14" fill="#1F6B63" stroke="var(--paper)" stroke-width="2"/></a><a href="#eklipse" class="tl-dot" data-id="eklipse" data-case="eklipse" data-aims="frame" aria-label="Eklipse: games between science and policy, 2026–Mar 2027"><title>Eklipse: games between science and policy · 2026–Mar 2027</title><circle cx="1017" cy="212" r="19" fill="none" stroke="#8A5A2B" stroke-width="1.5" opacity=".55"/><circle cx="1017" cy="212" r="14" fill="#8A5A2B" stroke="var(--paper)" stroke-width="2"/></a><a href="#room" class="tl-dot" data-id="cellule" data-case="room" data-aims="tradeoffs commons" aria-label="Cellule de crise, Oct–Nov 2026"><title>Cellule de crise · Oct–Nov 2026</title><circle cx="1057" cy="212" r="14" fill="var(--paper)" stroke="#2F5BA0" stroke-width="2" stroke-dasharray="3 2.5"/></a><a href="#room" class="tl-dot" data-id="room" data-case="room" data-aims="coop" aria-label="ROOM, a facilitation surface, Jan 2026–now"><title>ROOM, a facilitation surface · Jan 2026–now</title><circle cx="1097" cy="212" r="19" fill="none" stroke="#2F5BA0" stroke-width="1.5" opacity=".55"/><circle cx="1097" cy="212" r="14" fill="#2F5BA0" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-outils" class="tl-dot" data-id="outils" data-case="" data-aims="frame" aria-label="Participatory tools, six sessions, 5–17 Nov 2026"><title>Participatory tools, six sessions · 5–17 Nov 2026</title><circle cx="1017" cy="172" r="14" fill="var(--dot)" stroke="var(--paper)" stroke-width="2"/></a><a href="#w-lego" class="tl-dot" data-id="lego" data-case="" data-aims="tradeoffs" aria-label="The Brick Company, Oct 2026"><title>The Brick Company · Oct 2026</title><circle cx="1057" cy="172" r="14" fill="var(--paper)" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 2.5"/></a><a href="#w-icpic" class="tl-dot" data-id="icpic" data-case="" data-aims="frame" aria-label="From a culture result to a decision, Proposal, ICPIC 2027"><title>From a culture result to a decision · Proposal, ICPIC 2027</title><circle cx="1097" cy="172" r="14" fill="var(--paper)" stroke="var(--faint)" stroke-width="2" stroke-dasharray="3 2.5"/></a></svg></div>
+  <ul class="legend">
+   <li><a href="#daetox"><i style="--c:#1F6B63"></i>Territory game</a></li>
+   <li><a href="#tipping"><i style="--c:#B5523B"></i>Tipping Point and the PhD games</a></li>
+   <li><a href="#vetsim"><i style="--c:#5F5290"></i>Clinic simulator</a></li>
+   <li><a href="#agrifood"><i style="--c:#5E7D2E"></i>Maps people draw</a></li>
+   <li><a href="#room"><i style="--c:#2F5BA0"></i>Crisis game for a lecture hall</a></li>
+   <li><a href="#eklipse"><i style="--c:#8A5A2B"></i>Eklipse</a></li>
+   <li><span><i style="--c:var(--dot)"></i>Other work</span></li>
+   <li><span><i class="ring"></i>In use now</span></li>
+   <li><span><i class="dashed"></i>Prototype, not yet played</span></li>
+  </ul>
+ </div>
+</section>
 
-    const groups = {};
-    staggerEls.forEach(el=>{
-      const parent = el.closest('section');
-      const key = parent ? parent.id : 'default';
-      groups[key] = groups[key] || [];
-      groups[key].push(el);
-    });
-    Object.values(groups).forEach(list=>{
-      const sio = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting){
-            list.forEach((el,i)=>{ setTimeout(()=>el.classList.add('in'), i*70); });
-            sio.disconnect();
-          }
-        });
-      }, {threshold:0.1});
-      if(list[0]) sio.observe(list[0]);
-    });
-  } else {
-    revealEls.forEach(el=>el.classList.add('in'));
-    staggerEls.forEach(el=>el.classList.add('in'));
-  }
+<!-- ========== WHAT I LEARNED ========== -->
+<section class="learned" id="learned">
+ <div class="wrap">
+  <p class="eyebrow">What my PhD taught me</p>
+  <h2 class="reveal">People understand the whole problem best when three things come together.</h2>
+  <p class="lead reveal">For my PhD I studied six of my games, played by 472 people in Belgium, Nigeria and Uganda. People explained how the whole problem fits together best when the game gave them:</p>
+  <div class="three">
+   <figure class="reveal" style="--c:var(--ret)"><img src="tp_board.jpg" alt="The Tipping Point island seen from above" loading="lazy"><figcaption><span>1</span>Something they can all see and point at</figcaption></figure>
+   <figure class="reveal" style="--c:var(--fric)"><img src="geo_map.jpg" alt="Participants in Kinshasa annotate a map with markers" loading="lazy"><figcaption><span>2</span>A moment when their plan stops working</figcaption></figure>
+   <figure class="reveal" style="--c:var(--rec)"><img src="tp_chalk.jpg" alt="Blackboard with a drawn loop and team scores, used in the discussion after the game" loading="lazy"><figcaption><span>3</span>Time afterwards to work out what happened</figcaption></figure>
+  </div>
+  <p class="lead small reveal">So I plan all three on purpose: what stays on the table, the moment the plan should fail, and the questions for the discussion afterwards.</p>
+  <details class="more">
+   <summary>The research in more depth</summary>
+   <div class="more-body">
+    <p><b>After the game: conditions of play for systems-oriented explanation in public health and One Health education.</b> PhD in Public Health, University of Liège, since 2021 (defence 2027), with Prof. Nicolas Antoine-Moussiaux. Six games, 2021–2024, 472 adults. I analysed what players said and wrote in the discussion after each game, and compared it with how each game was set up.</p>
+    <p><b>Three kinds of material.</b> <i>Given</i>: what I supply, such as a board or cards. <i>Made</i>: what players build, such as a map or overlay. <i>Kept</i>: what is recorded during play to reconstruct from, such as a log or a photo of the board. Many do more than one job.</p>
+    <p><b>Two findings that changed my design.</b> No single game helped players both follow how things change over time and question how the problem had been defined. So I now combine different games, or add a second round where players can rethink their choices. Questionnaires filled in alone captured less than the same people explained together, so I give them after the group discussion.</p>
+    <figure><svg viewBox="0 0 1000 400" class="field" role="img" aria-labelledby="ff-t" style="width:100%;height:auto">
+     <title id="ff-t">The six PhD games placed by how far they opened change over time and questioning the frame.</title>
+     <rect x="90" y="20" width="860" height="320" fill="none" stroke="var(--rule)"/>
+     <rect x="640" y="30" width="300" height="130" rx="10" fill="var(--arrive)" opacity=".1"/>
+     <text x="790" y="62" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="var(--soft)">no single game reached this corner</text>
+     <text x="790" y="120" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="13" fill="var(--arrive)">the territory game is designed for it</text>
+     <g font-family="Archivo, sans-serif" font-size="15" fill="var(--ink)">
+      <circle cx="260" cy="70" r="22" fill="#B5523B"/><text x="292" y="75">Tipping Point</text>
+      <circle cx="220" cy="170" r="15" fill="#B5523B" opacity=".75"/><text x="244" y="175">Teamwork seminar</text>
+      <circle cx="470" cy="160" r="15" fill="#B5523B" opacity=".75"/><text x="492" y="150">Micro-warrior</text>
+      <circle cx="300" cy="280" r="15" fill="#B5523B" opacity=".75"/><text x="324" y="285">Territory Game</text>
+      <circle cx="700" cy="240" r="12" fill="#B5523B" opacity=".7"/><text x="720" y="245">Poultry game</text>
+      <circle cx="850" cy="300" r="9" fill="#B5523B" opacity=".65"/><text x="760" y="328">Ibadan mapping</text>
+     </g>
+     <g font-family="IBM Plex Mono, monospace" font-size="12.5" fill="var(--soft)"><text x="90" y="368">Players accept how the game defines the problem</text><text x="950" y="368" text-anchor="end">Players question it →</text><text x="70" y="340" transform="rotate(-90 70 340)">Seeing change over time: less</text><text x="70" y="20" transform="rotate(-90 70 20)" text-anchor="end">more →</text></g>
+    </svg><figcaption>Redrawn from the thesis. Dot size shows how much evidence sits behind each game.</figcaption></figure>
+   </div>
+  </details>
+ </div>
+</section>
 
-  /* count-up numbers */
-  const counters = document.querySelectorAll('.count');
-  const countUp = (el)=>{
-    const target = parseInt(el.getAttribute('data-target'), 10);
-    const dur = 1100;
-    const start = performance.now();
-    const step = (now)=>{
-      const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(eased * target).toLocaleString('en-US');
-      if(p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-  if('IntersectionObserver' in window){
-    const cio = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){ countUp(e.target); cio.unobserve(e.target); }
-      });
-    }, {threshold:0.4});
-    counters.forEach(el=>cio.observe(el));
-  } else {
-    counters.forEach(el=>{ el.textContent = el.getAttribute('data-target'); });
-  }
+<!-- ========== WORK ========== -->
+<section id="work" class="work-intro"><div class="wrap"><p class="eyebrow">Six stories</p><h2 class="reveal">The work</h2>
+ <nav class="story-index" aria-label="Jump to a story">
+  <a href="#daetox" style="--c:#1F6B63"><i></i>Three sectors, one map<small>Senegal</small></a>
+  <a href="#tipping" style="--c:#B5523B"><i></i>An island everyone can ruin<small>Belgium</small></a>
+  <a href="#vetsim" style="--c:#5F5290"><i></i>A clinic that checks your reasons<small>Belgium, France, Canada</small></a>
+  <a href="#agrifood" style="--c:#5E7D2E"><i></i>Maps people draw themselves<small>DR Congo, Nigeria, Mongolia</small></a>
+  <a href="#room" style="--c:#2F5BA0"><i></i>A crisis game for a full lecture hall<small>Belgium</small></a>
+  <a href="#eklipse" style="--c:#8A5A2B"><i></i>A guide for designing games for policy<small>International</small></a>
+ </nav></div></section>
 
-  /* architecture widget */
-  const archTabs = document.querySelectorAll('.arch-tab');
-  const archDescs = document.querySelectorAll('.arch-desc');
-  const archOrder = ['artefact','friction','reconstruction'];
-  const archBar = document.querySelector('.arch-progress-bar');
-  let archIndex = 0;
-  let archTimer = null;
-  let archPaused = false;
+<article class="story wrap" id="daetox" style="--c:#1F6B63" data-aims="frame coop">
+ <div class="story-media"><figure class="story-img reveal"><img src="dx_stack.jpg" alt="Three teams' transparent overlays stacked on one map, with an arrow tracing a chain through the water point" loading="lazy" class="contain"></figure>
+ <div class="thumbs"><figure><img src="dx_overlay.jpg" alt="A team's sheet drawn in felt pen over the printed map, Senegal workshop" loading="lazy"><figcaption>A team's sheet over the map</figcaption></figure><figure><img src="dx_cards.jpg" alt="Information cards linked by drawn lines on the map, Senegal workshop" loading="lazy"><figcaption>Cards linked on the map</figcaption></figure></div>
+ <div class="gmk-wrap" aria-label="What players work with">  <p class="gmk-out" data-g="given"><b>Given to players</b>A base map, 24 priced information cards, 14 action cards and paper money.</p><p class="gmk-out" data-g="made"><b>Made by players</b>Each team's drawing on its own clear plastic sheet.</p><p class="gmk-out" data-g="kept"><b>Kept for the discussion</b>The stacked sheets, and the list of what to find out next.</p></div>
+ </div>
+ <div class="story-text reveal">
+  <p class="where">Senegal · 2026 · One Health territory game · run by the partners</p>
+  <h3>Three sectors, one map</h3>
+  <ol class="chain">
+   <li class="s1"><b>The goal</b>Health, farming and livestock teams each see the area through their own lens. The goal is for them to notice this, and to see that the problems cross from one sector to another.</li>
+   <li class="s2"><b>The rules</b>Information costs money and each team can afford only part of it. Teams draw what they learn on clear plastic sheets laid over the same map. Most actions need several teams to pay together, and in a second round teams can change their choices.</li>
+   <li class="s3"><b>What happened</b>The partners ran the workshop in Senegal on their own, using only the materials. The photos below show the teams' own sheets and maps: stacked, they reveal links between sectors, and the discussion asks whose knowledge was missing.</li>
+  </ol>
+  <ul class="tags"><li>Game designer</li><li>Cards, map, clear sheets · 3 h 45</li><li>DAETOX / TISS · Ucoopia, IRD</li></ul>
+  <details class="more"><summary>More on this game</summary><div class="more-body">
+   <p><b>Who plays:</b> agronomists, health and veterinary staff, local officials and producers, in three sector teams. <b>Funding:</b> FFEM, DGD, Colruyt Group Foundation; TISS by Wallonie-Bruxelles International. Partners include LRIDA (Université de Parakou) and the ULiège Tropical Veterinary Institute.</p>
+   <p>Each team's list of what to find out next goes straight into the field study that follows the game.</p>
+  </div></details>
+  <a class="back" href="#work">↑ All six stories</a> <a class="back" href="#timeline">↑ Timeline</a>
+ </div>
+</article>
 
-  function setArch(key){
-    archTabs.forEach(t=> t.classList.toggle('active', t.dataset.key === key));
-    archTabs.forEach(t=> t.setAttribute('aria-selected', t.dataset.key === key ? 'true' : 'false'));
-    archDescs.forEach(d=> d.classList.toggle('active', d.dataset.panel === key));
-    archIndex = archOrder.indexOf(key);
-    restartBar();
-  }
-  function restartBar(){
-    if(!archBar) return;
-    archBar.classList.remove('animating');
-    void archBar.offsetWidth;
-    if(!archPaused){ archBar.classList.add('animating'); }
-  }
-  function advanceArch(){
-    if(archPaused) return;
-    archIndex = (archIndex + 1) % archOrder.length;
-    setArch(archOrder[archIndex]);
-  }
-  archTabs.forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      archPaused = true;
-      setArch(tab.dataset.key);
-      if(archBar) archBar.classList.remove('animating');
-    });
-  });
-  if(archBar){
-    archBar.addEventListener('transitionend', advanceArch);
-    setArch('artefact');
-  }
+<article class="story flip wrap" id="tipping" style="--c:#B5523B" data-aims="commons time">
+ <div class="story-media"><figure class="story-img reveal"><img src="tp_hands.jpg" alt="Players reaching across the table to place pieces on the island" loading="lazy"></figure>
+ <div class="gmk-wrap" aria-label="What players work with">  <p class="gmk-out" data-g="given"><b>Given to players</b>A finite island, waste tokens, and a forest that absorbs less each year.</p><p class="gmk-out" data-g="made"><b>Made by players</b>Each team's building strategy, tested again next session.</p><p class="gmk-out" data-g="kept"><b>Kept for the discussion</b>The state of the board and the scores on the blackboard, used in the discussion.</p></div>
+ </div>
+ <div class="story-text reveal">
+  <p class="where">Belgium · 2022–now · board game · 450+ players</p>
+  <h3>An island everyone can ruin</h3>
+  <ol class="chain">
+   <li class="s1"><b>The goal</b>When everyone takes a little from a shared resource, small gains add up to a large shared loss over time. The goal is for players to see this happen.</li>
+   <li class="s2"><b>The rules</b>Teams score points by building houses. Each house adds waste to land everyone shares, and the forest cleans up less of it each year. Teams may help each other, but nobody tells them so. There are three sessions, with a discussion after each.</li>
+   <li class="s3"><b>What happened</b>Over the three sessions, groups stopped protecting their own score and started protecting the island, and tried that new approach in the next session.</li>
+  </ol>
+  <ul class="tags"><li>Co-developer</li><li>3D-printed pieces, digital version</li><li>Published 2025</li></ul>
+  <details class="more"><summary>More on this game, and the other PhD games</summary><div class="more-body">
+   <p>Evaluated with 70 students through written reflections, focus groups and observation; published in <i>Humanities and Social Sciences Communications</i>, 2025.</p>
+   <ul class="mini-list">
+    <li><b>One Health teamwork seminar</b> · Belgium 2020–23 · built on the board game Pandemic · goal: working with other sectors under time pressure · a cooperative outbreak game, with a group discussion each day</li>
+    <li><b>Ibadan compound mapping</b> · Nigeria 2021 · goal: who is responsible for infection risk in a shared compound · residents and health workers drew their own compound</li>
+    <li><b>Territory Game</b> · Belgium 2021–25 · goal: combining what different roles know · information split across six roles</li>
+    <li><b>Micro-warrior</b> · Uganda 2024 · goal: seeing antibiotic resistance as a chain of everyday decisions · a phone game at five universities</li>
+    <li><b>Backyard poultry game</b> · Belgium 2023–25 · goal: weighing a vet's first instinct against what the law requires · a farm investigation with built-in traps</li>
+   </ul>
+  </div></details>
+  <a class="back" href="#work">↑ All six stories</a> <a class="back" href="#timeline">↑ Timeline</a>
+ </div>
+</article>
 
-  /* expand/collapse toggles */
-  document.querySelectorAll('[data-toggle]').forEach(btn=>{
-    const label = btn.getAttribute('data-label') || 'More';
-    btn.addEventListener('click', ()=>{
-      const panel = btn.previousElementSibling;
-      const open = panel.classList.toggle('open');
-      btn.classList.toggle('open', open);
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.innerHTML = (open ? 'Less' : label) + ' <span class="chev">▾</span>';
-    });
-  });
+<article class="story wrap" id="vetsim" style="--c:#5F5290" data-aims="tradeoffs time">
+ <div class="story-media"><figure class="story-img reveal screen"><img src="vs_overview.jpg" alt="Simulation dashboard comparing a team's plan with a baseline" loading="lazy"></figure>
+ <div class="gmk-wrap" aria-label="What players work with">  <p class="gmk-out" data-g="given"><b>Given to players</b>A clinic model: 14 services, staff, loans and carbon.</p><p class="gmk-out" data-g="made"><b>Made by players</b>Three decisions a year and a Friday investment case.</p><p class="gmk-out" data-g="kept"><b>Kept for the discussion</b>A record of every decision, which can be replayed against the "do nothing" version.</p></div>
+ </div>
+ <div class="story-text reveal">
+  <p class="where">Belgium, France, Canada · 2026 · browser simulation built with AI</p>
+  <h3>A clinic that checks your reasons</h3>
+  <ol class="chain">
+   <li class="s1"><b>The goal</b>See a veterinary clinic as a whole, where money, access to care, staff wellbeing and carbon emissions all affect each other, and judge a decision by comparing it with what would have happened without it.</li>
+   <li class="s2"><b>The rules</b>Teams make only three decisions a year, so they can follow cause and effect. Every plan is shown next to a "do nothing" version, and every decision is recorded so it can be replayed.</li>
+   <li class="s3"><b>What happened</b>One team said hiring a new vet had earned €58,600. When we replayed the clinic without her, the real gain was about €28,000. Hiring her was still a good choice, but not for the reason they gave.</li>
+  </ol>
+  <ul class="tags"><li>Designer and developer</li><li>English and French</li><li>Used at 4 other universities</li></ul>
+  <details class="more"><summary>More on this simulation</summary><div class="more-body">
+   <p>A model of 14 services, staff time, loans, commitments to five groups of people and carbon from published emission factors, with a workbook and teacher guides. Built with an AI model through a prompt structure I designed. First run 19–23 October 2026 with three teams. It is now used at four other universities, in France and Canada. A sister simulation runs a dairy farm one year per turn.</p>
+  </div></details>
+  <a class="back" href="#work">↑ All six stories</a> <a class="back" href="#timeline">↑ Timeline</a>
+ </div>
+</article>
 
-  /* publication filters */
-  const pubFilters = document.querySelectorAll('.pub-filter');
-  const pubItems = document.querySelectorAll('.pub-list li');
-  pubFilters.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      pubFilters.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const f = btn.dataset.filter;
-      pubItems.forEach(li=>{
-        li.classList.toggle('hide', f !== 'all' && li.dataset.cat !== f);
-      });
-    });
-  });
-</script>
+<article class="story flip wrap" id="agrifood" style="--c:#5E7D2E" data-aims="frame">
+ <div class="story-media"><figure class="story-img reveal"><img src="geo_room.jpg" alt="Workshop in Kinshasa: groups working on maps and information cards" loading="lazy"></figure>
+ <div class="thumbs"><figure><img src="mn_banner.jpg" alt="Resilient Threads One Health training of trainers banner with partner logos and a herder on the Mongolian steppe" loading="lazy"><figcaption>One Health training, Mongolia · image: Sustainable Fibre Alliance</figcaption></figure><figure><img src="amr_med.jpg" alt="Students' hand-drawn campus map of where medicines go" loading="lazy"><figcaption>Students' map of medicines, Nigeria</figcaption></figure></div>
+ <div class="gmk-wrap" aria-label="What players work with">  <p class="gmk-out" data-g="given"><b>Given to players</b>Blank paper or a base map, and priced information cards.</p><p class="gmk-out" data-g="made"><b>Made by players</b>The map participants draw of their own place.</p><p class="gmk-out" data-g="kept"><b>Kept for the discussion</b>Photos of the finished maps, used in the discussion and the follow-up.</p></div>
+ </div>
+ <div class="story-text reveal">
+  <p class="where">DR Congo, Nigeria, Mongolia · 2025–now · livestock, antibiotics, rangelands</p>
+  <h3>Maps people draw themselves</h3>
+  <ol class="chain">
+   <li class="s1"><b>The goal</b>The people who live in a place hold much of the knowledge a decision needs, and choosing what to find out already shapes the answer. The goal is for participants to experience both.</li>
+   <li class="s2"><b>The rules</b>Participants draw the map of their own area themselves. Information has a price, and the budget covers only part of it. The finished map is kept and used in the discussion afterwards.</li>
+   <li class="s3"><b>What happened</b>In a territory mapping game in Kinshasa, a cholera group and a malaria group drew two very different maps of the same area. On a Nigerian campus, students traced how leftover medicines travel from student rooms to the rubbish dump.</li>
+  </ol>
+  <ul class="tags"><li>Designer, facilitator, trainer</li><li>Maps, cards, online modules</li><li>GIRIS · DucitBlue · Resilient Threads</li></ul>
+  <details class="more"><summary>More on this work</summary><div class="more-body">
+   <figure><img src="mn_team.jpg" alt="International trainers, including me on the left, preparing the training in Mongolia" loading="lazy" style="border-radius:10px"><figcaption>International trainers preparing in Mongolia (me, left). Image: Sustainable Fibre Alliance.</figcaption></figure>
+   <div class="pics five"><img src="amr_med.jpg" alt="Hand-drawn campus map of medicines" loading="lazy"><img src="amr_food.jpg" alt="Hand-drawn campus map of food" loading="lazy"><img src="amr_water.jpg" alt="Hand-drawn campus map of water" loading="lazy"><img src="amr_animal.jpg" alt="Hand-drawn campus map of animals" loading="lazy"><img src="amr_waste.jpg" alt="Hand-drawn campus map of waste" loading="lazy"></div>
+   <ul class="mini-list">
+    <li><b>AMR Connect Campus</b> · Nigeria 2025–now · six campus sites now each have a local owner and a score every three months</li>
+    <li><b>Territory mapping game</b> · Kinshasa, DR Congo, 15 Dec 2025 · groups built a map of health risks from information they had to pay for</li>
+    <li><b>One Health training, Mongolia</b> · 2025–now · online One Health modules and on-site training of trainers using participatory tools, for the Resilient Threads project with the Government of Mongolia, the Royal Veterinary College, Odyssey Conservation Trust and the Sustainable Fibre Alliance</li>
+    <li><b>Smoke Smarter</b> · Vietnam · co-developed with a researcher, who ran it with fish smokers for his PhD</li><li><b>Fish parasites workshop</b> · Kenya · co-developed with a researcher, who ran it with fish farmers</li>
+    <li><b>Participatory tools course</b> · Nov 2026 · six sessions on participatory methods used with livestock keepers and communities</li>
+   </ul>
+  </div></details>
+  <a class="back" href="#work">↑ All six stories</a> <a class="back" href="#timeline">↑ Timeline</a>
+ </div>
+</article>
 
+<article class="story wrap" id="room" style="--c:#2F5BA0" data-aims="tradeoffs time">
+ <div class="story-media"><figure class="story-img reveal graphic" role="img" aria-label="One row's 100 euros split across four budget lines, feeding three shared gauges">
+  <svg viewBox="0 0 520 390"><g font-family="IBM Plex Mono, monospace" font-size="14" fill="var(--soft)">
+   <text x="20" y="40" fill="var(--ink)">one row · €100 · one round</text>
+   <rect x="20" y="58" width="168" height="54" rx="6" fill="#16262F"/><rect x="192" y="58" width="94" height="54" rx="6" fill="#1F6B63"/><rect x="290" y="58" width="140" height="54" rx="6" fill="#5F5290"/><rect x="434" y="58" width="66" height="54" rx="6" fill="#B5523B"/>
+   <text x="20" y="134">hospitals</text><text x="192" y="134">information</text><text x="290" y="134">prevention</text><text x="434" y="134">control</text>
+   <text x="20" y="190" fill="var(--ink)">shared screen</text>
+   <text x="20" y="232">lives</text><rect x="130" y="220" width="370" height="16" rx="8" fill="#EAE7DF"/><rect x="130" y="220" width="270" height="16" rx="8" fill="#2F5BA0"/>
+   <text x="20" y="276">trust</text><rect x="130" y="264" width="370" height="16" rx="8" fill="#EAE7DF"/><rect x="130" y="264" width="160" height="16" rx="8" fill="#2F5BA0"/>
+   <text x="20" y="320">equity</text><rect x="130" y="308" width="370" height="16" rx="8" fill="#EAE7DF"/><rect x="130" y="308" width="215" height="16" rx="8" fill="#2F5BA0"/>
+   <text x="20" y="372" fill="var(--faint)" font-size="12">prevention acts with a delay · control acts at once</text></g></svg></figure>
+ <div class="gmk-wrap" aria-label="What players work with">  <p class="gmk-out" data-g="given"><b>Given to players</b>Shared scores for lives saved, public trust and fairness, with delays built in.</p><p class="gmk-out" data-g="made"><b>Made by players</b>Each row's €100 split, every round.</p><p class="gmk-out" data-g="kept"><b>Kept for the discussion</b>The record of votes, replayed round by round in the discussion.</p></div>
+ </div>
+ <div class="story-text reveal">
+  <p class="where">Belgium · 2025–now · public health · Google Sheets and phones</p>
+  <h3>A crisis game for a full lecture hall</h3>
+  <ol class="chain">
+   <li class="s1"><b>The goal</b>Players weigh saving lives against public trust and fairness as an epidemic spreads from one commune to the next. My own design question: how do you run a real game in a lecture hall of about a hundred students, with fixed seats, their phones and no budget?</li>
+   <li class="s2"><b>The rules</b>Each group runs a commune and votes by phone through a Google Form. A shared Google Sheet spreads the epidemic to neighbouring communes, shows lives, trust and fairness on the big screen, and keeps every vote. Prevention takes time to work, control works at once, and a solidarity fund lets communes help the most fragile. One facilitator runs it all from a single menu.</li>
+   <li class="s3"><b>What happened</b>In the first version, two rows put all their money into police control in the last round. Because every vote was recorded, the class could see exactly when it turned, and discuss what that cost in public trust.</li>
+  </ol>
+  <ul class="tags"><li>Designer and developer</li><li>Free tools, one facilitator</li><li>Built for large lecture halls</li></ul>
+  <details class="more"><summary>More on this game and ROOM</summary><div class="more-body">
+   <p>The first version, <b>Budget de confiance</b>, ran on 21 November 2025: eight rows of students, six rounds, 42 votes recorded. The current version, <b>Cellule de crise</b>, has thirteen communes of about eight students each.</p>
+   <p><b>ROOM</b> is a meeting tool I built with a related goal: making sure a meeting ends with clear agreements. One topic at a time, one clock, a check before moving on, and commitments with an owner and a date. In use since January 2026, including with the Eklipse working group and the Province de Hainaut.</p>
+   <div class="pics"><img src="room.jpg" alt="ROOM showing one topic in focus and commitments with owners and dates" loading="lazy"></div>
+  </div></details>
+  <a class="back" href="#work">↑ All six stories</a> <a class="back" href="#timeline">↑ Timeline</a>
+ </div>
+</article>
+
+<article class="story flip wrap" id="eklipse" style="--c:#8A5A2B" data-aims="frame">
+ <div class="story-media"><figure class="story-img reveal graphic" aria-hidden="true">
+  <svg viewBox="0 0 520 390"><g font-family="IBM Plex Mono, monospace" font-size="14" fill="var(--soft)">
+   <text x="160" y="40">local</text><text x="270" y="40">regional</text><text x="400" y="40">national</text>
+   <text x="20" y="92">agenda</text><text x="20" y="152">options</text><text x="20" y="212">decision</text><text x="20" y="272">implementation</text><text x="20" y="332">evaluation</text></g>
+   <g fill="#8A5A2B"><circle cx="185" cy="88" r="9" opacity=".35"/><circle cx="300" cy="88" r="16" opacity=".6"/><circle cx="425" cy="88" r="20"/><circle cx="185" cy="148" r="18"/><circle cx="300" cy="148" r="13" opacity=".6"/><circle cx="425" cy="148" r="8" opacity=".35"/><circle cx="185" cy="208" r="7" opacity=".3"/><circle cx="300" cy="208" r="11" opacity=".5"/><circle cx="425" cy="208" r="14" opacity=".6"/><circle cx="185" cy="268" r="21"/><circle cx="300" cy="268" r="15" opacity=".6"/><circle cx="425" cy="268" r="9" opacity=".35"/><circle cx="185" cy="328" r="12" opacity=".5"/><circle cx="300" cy="328" r="10" opacity=".45"/><circle cx="425" cy="328" r="13" opacity=".55"/></g>
+   <text x="20" y="378" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--faint)">illustration: policy stages by level</text></svg></figure>
+ <div class="gmk-wrap" aria-label="What players work with">  <p class="gmk-out" data-g="given"><b>Given to the experts</b>A shared methods protocol and a template for describing each game.</p><p class="gmk-out" data-g="made"><b>Made by the experts</b>Their judgements on where games help, gathered in workshops.</p><p class="gmk-out" data-g="kept"><b>Kept for the report</b>A table of policy stages by policy level.</p></div>
+ </div>
+ <div class="story-text reveal">
+  <p class="where">International · 2026–27 · science and policy · co-chair</p>
+  <h3>A guide for designing games for policy</h3>
+  <ol class="chain">
+   <li class="s1"><b>The goal</b>Give game makers a guide to designing for what is needed at each level of biodiversity policy (local, regional, national) and at each stage of the policy cycle.</li>
+   <li class="s2"><b>How we work</b>With a group of about 14 experts, we are writing a methods protocol: a review of published games, a close look at selected game cases, and workshops where the experts compare where games help most. The guide comes from the group, so how we work together matters as much as the method.</li>
+   <li class="s3"><b>What comes next</b>The workshops run in 2027 and lead to a report with design guidance for game makers.</li>
+  </ol>
+  <ul class="tags"><li>Co-chair</li><li>Methods protocol</li><li>About 14 experts</li></ul>
+  <details class="more"><summary>More on this group</summary><div class="more-body">
+   <p>Eklipse expert working group <i>Games to connect science and policy</i>, co-chaired with Agnessa Spanellis (Edinburgh) and Claude Garcia (BFH), in answer to a request from the EcoKnowGames project (UKRI). The protocol covers a review of games published from 2011 to 2026, a synthesis of 6 to 10 game cases, and expert workshops.</p>
+  </div></details>
+  <a class="back" href="#work">↑ All six stories</a> <a class="back" href="#timeline">↑ Timeline</a>
+ </div>
+</article>
+
+<!-- ========== HOW I WORK ========== -->
+<section class="how">
+ <div class="wrap">
+  <p class="eyebrow">How I work with partners</p>
+  <h2 class="reveal">Who plays comes first.</h2>
+  <ol class="steps reveal">
+   <li><b>Who plays, and where? (room, devices, time)</b></li><li><b>What should they understand?</b></li><li><b>Which rules make them think about it?</b></li><li><b>Build it fast, with AI</b></li><li><b>Someone else runs it; I watch</b></li><li><b>Cut what wastes their time</b></li>
+  </ol>
+  <div class="without reveal">
+   <h3>Built to run without me</h3>
+   <p>I create everything a game needs, so that partners can run it on their own. That is how I want to work from now on.</p>
+   <ul>
+    <li><b>Senegal</b>The territory game, run by the DAETOX partners</li>
+    <li><b>Vietnam</b>Smoke Smarter, run by a researcher for his PhD</li>
+    <li><b>Kenya</b>The fish parasites workshop, run by a researcher</li>
+    <li><b>France and Canada</b>The clinic simulator, used at four other universities</li>
+   </ul>
+  </div>
+  <p class="lead small">Partners receive a design file, game cards produced from a spreadsheet so the numbers always add up, rule sheets for each stage, a minute-by-minute guide for the facilitator, a plan for testing the game, and the questions for the discussion afterwards.</p>
+ </div>
+</section>
+
+<!-- ========== EVERYTHING ========== -->
+<section class="all" id="all">
+ <div class="wrap">
+  <p class="eyebrow">Everything, dated</p>
+  <h2 class="reveal">All 29 pieces of work</h2>
+  <details class="more big" id="all-details"><summary>Open the full list</summary><div class="more-body">
+   <div class="filters" id="filters" role="group" aria-label="Filter the list">
+    <button aria-pressed="true" data-f="all">All</button>
+    <button aria-pressed="false" data-f="st:in-use">In use now</button>
+    <button aria-pressed="false" data-f="theme:agrifood">Agrifood</button><button aria-pressed="false" data-f="theme:one-health">One Health</button><button aria-pressed="false" data-f="theme:amr">AMR</button><button aria-pressed="false" data-f="theme:policy">Policy</button>
+    <button aria-pressed="false" data-f="fmt:board">Board</button><button aria-pressed="false" data-f="fmt:map">Maps</button><button aria-pressed="false" data-f="fmt:digital">Digital</button>
+   </div>
+   <table class="works"><thead><tr><th>№</th><th>When</th><th>What it is</th><th class="who">Who · where</th><th>Format</th><th>Status</th></tr></thead><tbody><tr id="w-pandemic" data-fmt="board" data-theme="one-health" data-st="repeated" data-id="pandemic"><td class="n">01</td><td class="when">2020–2023</td><td class="t"><b>One Health teamwork seminar (Pandemic)</b><span>Sessions built on the cooperative board game Pandemic, played under time pressure over four days, with a group discussion each day, to make teamwork visible.</span></td><td class="who">Practitioners from public health, veterinary and environmental work<br><span class="soft">Belgium · Four annual cohorts</span></td><td class="fmt">Board game</td><td class="st"><span class="st-b repeated">Played repeatedly</span></td></tr>
+<tr id="w-ibadan" data-fmt="map" data-theme="public-health" data-st="once" data-id="ibadan"><td class="n">02</td><td class="when">2021</td><td class="t"><b>Ibadan compound mapping</b><span>Residents and health workers draw where infections come from in their own compound, then check the posters made from their map.</span></td><td class="who">Residents, nurses, a caregiver, cleaners and doctors of one health-centre compound<br><span class="soft">Nigeria · 12 participants</span></td><td class="fmt">Map and territory</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-territory" data-fmt="map" data-theme="vet-education" data-st="repeated" data-id="territory"><td class="n">03</td><td class="when">2021–2025</td><td class="t"><b>Territory Game</b><span>Teams combine information cards to build a picture of a region and decide where a veterinary practice should open.</span></td><td class="who">Veterinary master&#x27;s students, ULiège<br><span class="soft">Belgium · 156 students (2021), rerun Dec 2025</span></td><td class="fmt">Map and territory</td><td class="st"><span class="st-b repeated">Played repeatedly</span></td></tr>
+<tr id="w-tipping" data-fmt="board" data-theme="one-health" data-st="in-use" data-id="tipping"><td class="n">04</td><td class="when">2022–now</td><td class="t"><b>Tipping Point</b><span>An island every player builds on and every player can ruin: houses make waste that sits on everyone&#x27;s land.</span></td><td class="who">Students across master&#x27;s and certificate programmes; workshop groups<br><span class="soft">Belgium · 450+ players; 70 in the evaluation</span></td><td class="fmt">Board game</td><td class="st"><span class="st-b in-use">In use now</span></td></tr>
+<tr id="w-bizgame" data-fmt="course" data-theme="vet-education" data-st="repeated" data-id="bizgame"><td class="n">05</td><td class="when">2023–now</td><td class="t"><b>Veterinary business game</b><span>A week of clinic management in which each team&#x27;s work feeds the next task.</span></td><td class="who">Veterinary students, ULiège<br><span class="soft">Belgium · Yearly cohorts</span></td><td class="fmt">Course</td><td class="st"><span class="st-b repeated">Played repeatedly</span></td></tr>
+<tr id="w-poultry" data-fmt="digital" data-theme="vet-education" data-st="repeated" data-id="poultry"><td class="n">06</td><td class="when">2023–2025</td><td class="t"><b>Backyard poultry game</b><span>A point-and-click investigation of a backyard flock, where a vet&#x27;s first instinct clashes with what the law requires.</span></td><td class="who">Veterinary students<br><span class="soft">Belgium · 78 students (2024)</span></td><td class="fmt">Digital</td><td class="st"><span class="st-b repeated">Played repeatedly</span></td></tr>
+<tr id="w-microwarrior" data-fmt="digital" data-theme="amr" data-st="once" data-id="microwarrior"><td class="n">07</td><td class="when">Aug–Dec 2024</td><td class="t"><b>Micro-warrior, AMR narrative game</b><span>A story-based game on antibiotics, played on students&#x27; own phones, with a short questionnaire before and after.</span></td><td class="who">Medical and nursing students at five Ugandan universities<br><span class="soft">Uganda · 143 pre-tests, 80 paired, 42 in focus groups</span></td><td class="fmt">Digital</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-chronilux" data-fmt="workshop" data-theme="public-health" data-st="once" data-id="chronilux"><td class="n">08</td><td class="when">2024–Jan 2025</td><td class="t"><b>Chronilux</b><span>A game on how care is coordinated for people with long-term illness, ending with a workshop at a conference.</span></td><td class="who">About 60 health professionals, Province of Luxembourg<br><span class="soft">Belgium · ≈60 professionals</span></td><td class="fmt">Workshop</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-octopus" data-fmt="card" data-theme="policy" data-st="repeated" data-id="octopus"><td class="n">09</td><td class="when">Jan 2025–Nov 2026</td><td class="t"><b>GP shortage, Province de Hainaut</b><span>A card game and group discussion on why a Belgian province is short of family doctors, followed by a meeting with the province.</span></td><td class="who">Provincial officials and health actors, with Octopus Lab<br><span class="soft">Belgium · Focus group; provincial follow-up 11 Nov 2026</span></td><td class="fmt">Card game</td><td class="st"><span class="st-b repeated">Played repeatedly</span></td></tr>
+<tr id="w-moosg" data-fmt="roleplay" data-theme="amr" data-st="once" data-id="moosg"><td class="n">10</td><td class="when">2025</td><td class="t"><b>Hôpital Ngolo, neonatal sepsis</b><span>A role-play of a neonatal sepsis crisis in a district hospital.</span></td><td class="who">Health students<br><span class="soft">— · One run with interaction data</span></td><td class="fmt">Role-play</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-codecritical" data-fmt="board" data-theme="public-health" data-st="once" data-id="codecritical"><td class="n">11</td><td class="when">2025</td><td class="t"><b>Code Critical</b><span>A board game about an epidemic reaching a health centre, with a discussion the players run themselves.</span></td><td class="who">Health students<br><span class="soft">Belgium · Played; the players&#x27; own discussions were recorded</span></td><td class="fmt">Board game</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-budget" data-fmt="sheet" data-theme="public-health" data-st="once" data-id="budget"><td class="n">12</td><td class="when">21 Nov 2025</td><td class="t"><b>Budget de confiance</b><span>A crisis budget split across hospitals, information, prevention and control, voted by each row of a lecture hall through a form.</span></td><td class="who">Public health students, course on ethics and democracy<br><span class="soft">Belgium · 8 row-teams, 6 rounds, 42 decisions logged</span></td><td class="fmt">Spreadsheet and forms</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-amrcampus" data-fmt="map" data-theme="amr" data-st="in-use" data-id="amrcampus"><td class="n">13</td><td class="when">Nov 2025–now</td><td class="t"><b>AMR Connect Campus</b><span>Students map where antimicrobial resistance meets daily life on their own campus, then act on each site with a local owner.</span></td><td class="who">Student AMR clubs at UNN Nsukka and LAUTECH<br><span class="soft">Nigeria · 37 student volunteers (LAUTECH); six campus sites</span></td><td class="fmt">Map and territory</td><td class="st"><span class="st-b in-use">In use now</span></td></tr>
+<tr id="w-kinshasa" data-fmt="map" data-theme="agrifood" data-st="once" data-id="kinshasa"><td class="n">14</td><td class="when">15 Dec 2025</td><td class="t"><b>Territory mapping game, Kinshasa</b><span>Teams spend a budget on information cards to map health risks in a livestock area, then draft an action plan.</span></td><td class="who">Health and livestock professionals, Mont Ngafula<br><span class="soft">DR Congo · Cholera and malaria groups</span></td><td class="fmt">Map and territory</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-smoke" data-fmt="board" data-theme="agrifood" data-st="once" data-id="smoke"><td class="n">15</td><td class="when">Oct 2025–now</td><td class="t"><b>Smoke Smarter</b><span>A game on smoke, health and price along the smoked-fish chain, co-developed with a Vietnamese researcher who ran it for his PhD.</span></td><td class="who">Fish smokers in Vietnam, with a PhD researcher<br><span class="soft">Vietnam · Used in a PhD study</span></td><td class="fmt">Board game</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-muls" data-fmt="course" data-theme="one-health" data-st="in-use" data-id="muls"><td class="n">16</td><td class="when">2025–now</td><td class="t"><b>One Health training, Mongolia</b><span>Online One Health modules and on-site training of trainers with participatory tools, for the Resilient Threads project.</span></td><td class="who">Mongolian specialists who train others, in a project with the Government of Mongolia<br><span class="soft">Mongolia · Six weeks, 96 hours, EN/MN</span></td><td class="fmt">Course</td><td class="st"><span class="st-b in-use">In use now</span></td></tr>
+<tr id="w-decision" data-fmt="workshop" data-theme="policy" data-st="prototype" data-id="decision"><td class="n">17</td><td class="when">Dec 2025</td><td class="t"><b>Decision Rehearsal Workshops</b><span>Teams practise a real decision with prepared briefing packs before they take it.</span></td><td class="who">Organisations facing a decision<br><span class="soft">Belgium · One pilot meeting</span></td><td class="fmt">Workshop</td><td class="st"><span class="st-b proto">Prototype</span></td></tr>
+<tr id="w-miro" data-fmt="digital" data-theme="one-health" data-st="prototype" data-id="miro"><td class="n">18</td><td class="when">Nov 2025</td><td class="t"><b>Time, Place, Permission (Miro)</b><span>An online crisis game played on a shared digital whiteboard (Miro).</span></td><td class="who">Online One Health groups<br><span class="soft">— · Kit ready</span></td><td class="fmt">Digital</td><td class="st"><span class="st-b proto">Prototype</span></td></tr>
+<tr id="w-flow" data-fmt="board" data-theme="public-health" data-st="prototype" data-id="flow"><td class="n">19</td><td class="when">Nov 2025</td><td class="t"><b>Close the Gap · Eight Rounds to Breathe</b><span>Two print-and-play games on patient flow and hospital capacity.</span></td><td class="who">Hospital teams<br><span class="soft">— · Print-and-play kits</span></td><td class="fmt">Board game</td><td class="st"><span class="st-b proto">Prototype</span></td></tr>
+<tr id="w-vetsim" data-fmt="digital" data-theme="vet-education" data-st="in-use" data-id="vetsim"><td class="n">20</td><td class="when">2025–now; first run 19–23 Oct 2026</td><td class="t"><b>Clinic simulator and guided week</b><span>A clinic that teams run for several years, balancing money, access to care, team climate and carbon, inside a guided week.</span></td><td class="who">Veterinary master&#x27;s students with no economics background<br><span class="soft">Belgium · France · Canada · Used at four other universities, in France and Canada</span></td><td class="fmt">Digital</td><td class="st"><span class="st-b in-use">In use now</span></td></tr>
+<tr id="w-cellule" data-fmt="sheet" data-theme="public-health" data-st="prototype" data-id="cellule"><td class="n">21</td><td class="when">Oct–Nov 2026</td><td class="t"><b>Cellule de crise</b><span>Thirteen communes share an epidemic that spills between neighbours; a solidarity pot can fund the most fragile.</span></td><td class="who">Public health students, 13 groups of about 8<br><span class="soft">Belgium · Ready for the 2026–27 cohort</span></td><td class="fmt">Spreadsheet and forms</td><td class="st"><span class="st-b proto">Prototype</span></td></tr>
+<tr id="w-room" data-fmt="live" data-theme="policy" data-st="in-use" data-id="room"><td class="n">22</td><td class="when">Jan 2026–now</td><td class="t"><b>ROOM, a facilitation surface</b><span>A meeting screen that shows one topic at a time, asks &#x27;have we written down what we agreed?&#x27;, and records who will do what by when.</span></td><td class="who">Working groups, partners and provincial actors<br><span class="soft">International · Five recorded meetings</span></td><td class="fmt">Live facilitation tool</td><td class="st"><span class="st-b in-use">In use now</span></td></tr>
+<tr id="w-fishpar" data-fmt="map" data-theme="agrifood" data-st="once" data-id="fishpar"><td class="n">23</td><td class="when">Jan 2026</td><td class="t"><b>Fish parasites territory workshop</b><span>Fish farmers map their own area, then lay parasite cards and beans on it to see where risk gathers. Run by the researcher in Kenya.</span></td><td class="who">Fish farmers in Kenya, with a researcher<br><span class="soft">Kenya · Used in a research study</span></td><td class="fmt">Map and territory</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-ferme" data-fmt="digital" data-theme="agrifood" data-st="prototype" data-id="ferme"><td class="n">24</td><td class="when">Oct 2026</td><td class="t"><b>La ferme du Thier</b><span>A dairy farm run one year per turn, based on real Walloon farm figures; the environment is the one party that cannot speak for itself.</span></td><td class="who">Veterinary students advising a dairy family<br><span class="soft">Belgium · Built and tested (67 checks)</span></td><td class="fmt">Digital</td><td class="st"><span class="st-b proto">Prototype</span></td></tr>
+<tr id="w-eklipse" data-fmt="method" data-theme="policy" data-st="in-use" data-id="eklipse"><td class="n">25</td><td class="when">2026–Mar 2027</td><td class="t"><b>Eklipse: games between science and policy</b><span>Where serious games fit each stage of biodiversity policy, from local to national: scoping review, case synthesis and expert workshops.</span></td><td class="who">An expert working group of about 14 across Europe and beyond<br><span class="soft">International · Report due early 2027</span></td><td class="fmt">Method and protocol</td><td class="st"><span class="st-b in-use">In use now</span></td></tr>
+<tr id="w-daetox" data-fmt="map" data-theme="agrifood" data-st="once" data-id="daetox"><td class="n">26</td><td class="when">Aug–Nov 2026; run in Senegal, Nov 2026</td><td class="t"><b>One Health territory game, DAETOX / TISS</b><span>Three sector teams buy information about one area, draw what they learn on clear sheets over a shared map, and discover how their own sector&#x27;s view shaped what they chose.</span></td><td class="who">Agronomists, health and veterinary staff, local officials and producers<br><span class="soft">Senegal · Benin · DR Congo · Run by the partners in Senegal, Nov 2026</span></td><td class="fmt">Map and territory</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-outils" data-fmt="course" data-theme="agrifood" data-st="once" data-id="outils"><td class="n">27</td><td class="when">5–17 Nov 2026</td><td class="t"><b>Participatory tools, six sessions</b><span>A six-session course on tools for working with communities (mapping, seasonal calendars, problem trees and more); each session builds on the last.</span></td><td class="who">Students preparing field projects<br><span class="soft">Belgium · Six half-day sessions</span></td><td class="fmt">Course</td><td class="st"><span class="st-b once">Played</span></td></tr>
+<tr id="w-lego" data-fmt="board" data-theme="public-health" data-st="prototype" data-id="lego"><td class="n">28</td><td class="when">Oct 2026</td><td class="t"><b>The Brick Company</b><span>Three toy companies learn that every choice has a price.</span></td><td class="who">Children in a systems thinking club<br><span class="soft">— · Ready</span></td><td class="fmt">Board game</td><td class="st"><span class="st-b proto">Prototype</span></td></tr>
+<tr id="w-icpic" data-fmt="workshop" data-theme="amr" data-st="prototype" data-id="icpic"><td class="n">29</td><td class="when">Proposal, ICPIC 2027</td><td class="t"><b>From a culture result to a decision</b><span>Tables trace one positive culture result back to the decisions around it.</span></td><td class="who">Infection prevention practitioners<br><span class="soft">Switzerland · Proposed session</span></td><td class="fmt">Workshop</td><td class="st"><span class="st-b proto">Prototype</span></td></tr></tbody></table>
+  </div></details>
+ </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section class="contact" id="contact">
+ <div class="wrap">
+  <p class="eyebrow">Working together</p>
+  <h2 class="reveal">What I bring</h2>
+  <ul class="bring">
+   <li class="reveal">Games built around what decision-makers need to understand before they decide.</li>
+   <li class="reveal">Games that partners can run on their own, with everything they need in the box.</li>
+   <li class="reveal">A discussion after the game that is planned as carefully as the game itself, so what players work out feeds into real decisions.</li>
+   <li class="reveal">Work in English and French, on paper or online, with a clear account of what each game can and cannot show.</li>
+  </ul>
+  <div class="hero-cta"><a class="btn solid light" href="mailto:julianirabor@gmail.com">julianirabor@gmail.com</a><a class="btn light" href="https://www.linkedin.com/in/irabor">LinkedIn ↗</a><a class="btn light" href="Irabor_Portfolio_2026.pdf" download>Download the PDF</a></div>
+  <details class="more dark"><summary>Publications and background</summary><div class="more-body">
+   <ul class="pubs">
+    <li><b>2026</b> Using a cooperative board game to examine One Health teamwork functions under pressure. <i>Scientific Reports</i>. <a href="https://doi.org/10.1038/s41598-026-63909-x">↗</a></li>
+    <li><b>2026</b> Data sharing for zoonoses surveillance in Senegal. <i>Frontiers in Veterinary Science</i>. <a href="https://doi.org/10.3389/fvets.2026.1739586">↗</a></li>
+    <li><b>2025</b> Gaming for change: systems thinking through complexity-inspired game mechanics. <i>Humanities and Social Sciences Communications</i>. <a href="https://doi.org/10.1057/s41599-025-04990-x">↗</a></li>
+    <li><b>2025</b> A facilitation-driven game for reflective, collaborative veterinary education. <i>Irish Veterinary Journal</i>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12535145/">↗</a></li>
+    <li><b>2025</b> Multi-criteria decision analysis to prioritise rabies interventions in Burkina Faso. <i>BMC Public Health</i>.</li>
+    <li><b>2025</b> Rabies prevention and control coordination in Maramag, Philippines. <i>One Health Cases</i>. <a href="https://orbi.uliege.be/handle/2268/342167">↗</a></li>
+    <li><b>2024</b> A serious game framework for systems-thinking skills. <i>Journal of Veterinary Medical Education</i>. <a href="https://utppublishing.com/doi/10.3138/jvme-2023-0048">↗</a></li>
+    <li><b>2024</b> Avian influenza control in Ivory Coast with soft systems methodology. <i>One Health Cases</i>. <a href="https://doi.org/10.1079/onehealthcases.2024.0027">↗</a></li>
+    <li><b>2023</b> Co-design of WASH communication materials in Ibadan, Nigeria. <i>One Health Cases</i>.</li>
+    <li><b>2022</b> Teaching and learning for change: a post-graduate One Health program. <i>Sustainability Science</i>.</li>
+    <li><b>Report</b> Evaluation of the Friendship Transitional Funding Project, Bangladesh, 2017–2023. <a href="https://orbi.uliege.be/handle/2268/346038">↗</a></li>
+   </ul>
+   <p><b>Background.</b> DVM, University of Ibadan (2016) · Master of Specialization in Integrated Management of Health Risks, University of Liège (2020) · Certificate in Serious Game Design (2022) · PhD candidate in Public Health, University of Liège (defence 2027) · teaching at the University of Liège since 2020 · consultant since 2024 (Bangladesh, Mongolia, Belgium) · co-chair, Eklipse working group (2026).</p>
+  </div></details>
+  <p class="foot">Thomas-Julian Irabor, DVM, PhD candidate · currently at the University of Liège (FARAH, Faculty of Veterinary Medicine) · julianirabor@gmail.com · Rulebooks, facilitator guides and the thesis on request.</p>
+ </div>
+</section>
+</main>
+<script>window.WORKS={"pandemic": {"t": "One Health teamwork seminar (Pandemic)", "case": "tipping", "fmt": "Board game", "when": "2020–2023", "line": "Sessions built on the cooperative board game Pandemic, played under time pressure over four days, with a group discussion each day, to make teamwork visible.", "st": "Played repeatedly", "who": "Practitioners from public health, veterinary and environmental work", "aims": "coop time"}, "ibadan": {"t": "Ibadan compound mapping", "case": "tipping", "fmt": "Map and territory", "when": "2021", "line": "Residents and health workers draw where infections come from in their own compound, then check the posters made from their map.", "st": "Played", "who": "Residents, nurses, a caregiver, cleaners and doctors of one health-centre compound", "aims": "frame coop"}, "territory": {"t": "Territory Game", "case": "tipping", "fmt": "Map and territory", "when": "2021–2025", "line": "Teams combine information cards to build a picture of a region and decide where a veterinary practice should open.", "st": "Played repeatedly", "who": "Veterinary master's students, ULiège", "aims": "coop frame"}, "tipping": {"t": "Tipping Point", "case": "tipping", "fmt": "Board game", "when": "2022–now", "line": "An island every player builds on and every player can ruin: houses make waste that sits on everyone's land.", "st": "In use now", "who": "Students across master's and certificate programmes; workshop groups", "aims": "commons time"}, "bizgame": {"t": "Veterinary business game", "case": null, "fmt": "Course", "when": "2023–now", "line": "A week of clinic management in which each team's work feeds the next task.", "st": "Played repeatedly", "who": "Veterinary students, ULiège", "aims": "tradeoffs"}, "poultry": {"t": "Backyard poultry game", "case": "tipping", "fmt": "Digital", "when": "2023–2025", "line": "A point-and-click investigation of a backyard flock, where a vet's first instinct clashes with what the law requires.", "st": "Played repeatedly", "who": "Veterinary students", "aims": "frame"}, "microwarrior": {"t": "Micro-warrior, AMR narrative game", "case": "tipping", "fmt": "Digital", "when": "Aug–Dec 2024", "line": "A story-based game on antibiotics, played on students' own phones, with a short questionnaire before and after.", "st": "Played", "who": "Medical and nursing students at five Ugandan universities", "aims": "time frame"}, "chronilux": {"t": "Chronilux", "case": null, "fmt": "Workshop", "when": "2024–Jan 2025", "line": "A game on how care is coordinated for people with long-term illness, ending with a workshop at a conference.", "st": "Played", "who": "About 60 health professionals, Province of Luxembourg", "aims": "coop"}, "octopus": {"t": "GP shortage, Province de Hainaut", "case": null, "fmt": "Card game", "when": "Jan 2025–Nov 2026", "line": "A card game and group discussion on why a Belgian province is short of family doctors, followed by a meeting with the province.", "st": "Played repeatedly", "who": "Provincial officials and health actors, with Octopus Lab", "aims": "frame coop"}, "moosg": {"t": "Hôpital Ngolo, neonatal sepsis", "case": null, "fmt": "Role-play", "when": "2025", "line": "A role-play of a neonatal sepsis crisis in a district hospital.", "st": "Played", "who": "Health students", "aims": "coop"}, "codecritical": {"t": "Code Critical", "case": null, "fmt": "Board game", "when": "2025", "line": "A board game about an epidemic reaching a health centre, with a discussion the players run themselves.", "st": "Played", "who": "Health students", "aims": "time tradeoffs"}, "budget": {"t": "Budget de confiance", "case": "room", "fmt": "Spreadsheet and forms", "when": "21 Nov 2025", "line": "A crisis budget split across hospitals, information, prevention and control, voted by each row of a lecture hall through a form.", "st": "Played", "who": "Public health students, course on ethics and democracy", "aims": "tradeoffs time"}, "amrcampus": {"t": "AMR Connect Campus", "case": "agrifood", "fmt": "Map and territory", "when": "Nov 2025–now", "line": "Students map where antimicrobial resistance meets daily life on their own campus, then act on each site with a local owner.", "st": "In use now", "who": "Student AMR clubs at UNN Nsukka and LAUTECH", "aims": "frame"}, "kinshasa": {"t": "Territory mapping game, Kinshasa", "case": "agrifood", "fmt": "Map and territory", "when": "15 Dec 2025", "line": "Teams spend a budget on information cards to map health risks in a livestock area, then draft an action plan.", "st": "Played", "who": "Health and livestock professionals, Mont Ngafula", "aims": "frame tradeoffs"}, "smoke": {"t": "Smoke Smarter", "case": "agrifood", "fmt": "Board game", "when": "Oct 2025–now", "line": "A game on smoke, health and price along the smoked-fish chain, co-developed with a Vietnamese researcher who ran it for his PhD.", "st": "Played", "who": "Fish smokers in Vietnam, with a PhD researcher", "aims": "tradeoffs"}, "muls": {"t": "One Health training, Mongolia", "case": "agrifood", "fmt": "Course", "when": "2025–now", "line": "Online One Health modules and on-site training of trainers with participatory tools, for the Resilient Threads project.", "st": "In use now", "who": "Mongolian specialists who train others, in a project with the Government of Mongolia", "aims": "commons frame"}, "decision": {"t": "Decision Rehearsal Workshops", "case": null, "fmt": "Workshop", "when": "Dec 2025", "line": "Teams practise a real decision with prepared briefing packs before they take it.", "st": "Prototype", "who": "Organisations facing a decision", "aims": "tradeoffs"}, "miro": {"t": "Time, Place, Permission (Miro)", "case": null, "fmt": "Digital", "when": "Nov 2025", "line": "An online crisis game played on a shared digital whiteboard (Miro).", "st": "Prototype", "who": "Online One Health groups", "aims": "coop"}, "flow": {"t": "Close the Gap · Eight Rounds to Breathe", "case": null, "fmt": "Board game", "when": "Nov 2025", "line": "Two print-and-play games on patient flow and hospital capacity.", "st": "Prototype", "who": "Hospital teams", "aims": "time"}, "vetsim": {"t": "Clinic simulator and guided week", "case": "vetsim", "fmt": "Digital", "when": "2025–now; first run 19–23 Oct 2026", "line": "A clinic that teams run for several years, balancing money, access to care, team climate and carbon, inside a guided week.", "st": "In use now", "who": "Veterinary master's students with no economics background", "aims": "tradeoffs time"}, "cellule": {"t": "Cellule de crise", "case": "room", "fmt": "Spreadsheet and forms", "when": "Oct–Nov 2026", "line": "Thirteen communes share an epidemic that spills between neighbours; a solidarity pot can fund the most fragile.", "st": "Prototype", "who": "Public health students, 13 groups of about 8", "aims": "tradeoffs commons"}, "room": {"t": "ROOM, a facilitation surface", "case": "room", "fmt": "Live facilitation tool", "when": "Jan 2026–now", "line": "A meeting screen that shows one topic at a time, asks 'have we written down what we agreed?', and records who will do what by when.", "st": "In use now", "who": "Working groups, partners and provincial actors", "aims": "coop"}, "fishpar": {"t": "Fish parasites territory workshop", "case": "agrifood", "fmt": "Map and territory", "when": "Jan 2026", "line": "Fish farmers map their own area, then lay parasite cards and beans on it to see where risk gathers. Run by the researcher in Kenya.", "st": "Played", "who": "Fish farmers in Kenya, with a researcher", "aims": "frame"}, "ferme": {"t": "La ferme du Thier", "case": "agrifood", "fmt": "Digital", "when": "Oct 2026", "line": "A dairy farm run one year per turn, based on real Walloon farm figures; the environment is the one party that cannot speak for itself.", "st": "Prototype", "who": "Veterinary students advising a dairy family", "aims": "tradeoffs commons"}, "eklipse": {"t": "Eklipse: games between science and policy", "case": "eklipse", "fmt": "Method and protocol", "when": "2026–Mar 2027", "line": "Where serious games fit each stage of biodiversity policy, from local to national: scoping review, case synthesis and expert workshops.", "st": "In use now", "who": "An expert working group of about 14 across Europe and beyond", "aims": "frame"}, "daetox": {"t": "One Health territory game, DAETOX / TISS", "case": "daetox", "fmt": "Map and territory", "when": "Aug–Nov 2026; run in Senegal, Nov 2026", "line": "Three sector teams buy information about one area, draw what they learn on clear sheets over a shared map, and discover how their own sector's view shaped what they chose.", "st": "Played", "who": "Agronomists, health and veterinary staff, local officials and producers", "aims": "frame coop"}, "outils": {"t": "Participatory tools, six sessions", "case": null, "fmt": "Course", "when": "5–17 Nov 2026", "line": "A six-session course on tools for working with communities (mapping, seasonal calendars, problem trees and more); each session builds on the last.", "st": "Played", "who": "Students preparing field projects", "aims": "frame"}, "lego": {"t": "The Brick Company", "case": null, "fmt": "Board game", "when": "Oct 2026", "line": "Three toy companies learn that every choice has a price.", "st": "Prototype", "who": "Children in a systems thinking club", "aims": "tradeoffs"}, "icpic": {"t": "From a culture result to a decision", "case": null, "fmt": "Workshop", "when": "Proposal, ICPIC 2027", "line": "Tables trace one positive culture result back to the decisions around it.", "st": "Prototype", "who": "Infection prevention practitioners", "aims": "frame"}};</script>
+<script src="story.js"></script>
 </body>
 </html>

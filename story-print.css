@@ -1,0 +1,90 @@
+@page{size:A4 landscape;margin:11mm 13mm}
+html{font-size:9.5pt}
+body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.progress,.top,.skip,.tip,.hero-cta,.filters,.hint{display:none!important}
+.reveal{opacity:1!important;transform:none!important}
+.hero{min-height:0;padding:0 0 4mm;grid-template-columns:1.1fr 1fr;gap:10mm}
+.hero h1{font-size:30pt}.hero-img img{aspect-ratio:4/3;max-height:95mm}
+.numbers{padding:0 0 4mm}.numbers b{font-size:24pt}
+.timeline-wrap{padding:6mm 0;break-before:page}
+.learned,.how,.all,.contact{padding:0;break-before:page}
+.contact{background:#fff;color:var(--ink)}.contact .eyebrow,.foot{color:var(--soft)}
+.bring li{color:var(--ink);font-size:13pt;border-color:var(--rule)}
+.btn.light{display:none}
+details.more.dark summary,details.more.dark .more-body,details.more.dark .more-body b{color:var(--ink)}
+.pubs li{border-color:var(--rule)}
+.three img{max-height:55mm}
+.bridge{padding:6mm 8mm}
+.work-intro{display:none}
+.story{break-before:page;padding:0;grid-template-columns:1fr 1fr;gap:9mm;align-items:start}
+.story.flip .story-img{order:0}
+.story-img img{max-height:110mm}
+.story h3{font-size:24pt}
+details.more summary::before{display:none}
+details.more summary{min-height:0;padding-top:3mm;font-size:9pt;color:var(--soft)}
+.pics img{max-height:40mm}.pics.five img{max-height:28mm}
+table.works{font-size:7.8pt}table.works td{padding:1.2mm 2mm 1.2mm 0}
+table.works tr{break-inside:avoid}
+.steps li{padding:3mm}
+.inner{padding:0}
+.bridge,.three,.story-img,.moment,.outcome,figure{break-inside:avoid}
+.field{max-height:62mm}
+.more-body{font-size:8.6pt}
+.mini-list li{margin-bottom:1mm}
+.story-text>p{font-size:10.5pt}
+.moment,.outcome{font-size:9.5pt;padding:2.5mm 4mm}
+.story-img img{max-height:95mm}
+.learned h2,.how h2,.all h2,.contact h2{font-size:22pt}
+.lead{font-size:11pt}
+.three img{max-height:48mm}
+.pics img{max-height:34mm}.pics.five img{max-height:24mm}
+.timeline-wrap{break-before:auto;padding-top:2mm}
+.timeline-wrap{break-before:page}
+.more-body figure,.more-body .pics{display:none}
+.learned .more-body{columns:2;column-gap:8mm}
+details.more.big>summary{display:none}
+.wrap{padding-left:0!important;padding-right:0!important;max-width:none}
+.story-img{position:static!important}
+.aims,.aim-count{display:none!important}
+.design{padding:0;break-before:page;background:#fff;border:0}
+.design h2{font-size:22pt}
+.chain.big{grid-template-columns:repeat(4,1fr);gap:4mm;margin-top:6mm}
+.chain.big li{padding:4mm}
+.chain li{font-size:9.6pt;padding-bottom:3mm}
+.timeline-wrap{break-before:auto;border:0;padding-top:10mm}
+.story.wrap{padding-top:0;padding-bottom:0}
+.hero.wrap{padding-top:0}
+.timeline-wrap{break-before:page;padding-top:0}
+.three img{max-height:38mm}
+.three figcaption{padding:2.5mm 4mm}
+.learned .more-body{font-size:8pt;line-height:1.35}
+.learned details{break-inside:avoid}
+.story-img{position:relative!important}
+.learned details{break-inside:auto}
+.learned .more-body{columns:3;column-gap:6mm;font-size:7.8pt}
+.learned .lead{margin-top:3mm}
+.learned h2{font-size:20pt}
+.learned details{break-before:page;border:0}
+.learned details>summary{font:400 20pt/1.1 var(--display)!important;color:var(--ink)!important;padding:0 0 4mm}
+.learned .more-body{columns:2;font-size:9pt}
+.learned .more-body figure{display:block;column-span:all;margin-top:4mm}
+.learned .more-body .field{max-height:70mm}
+.learned .more-body{max-width:none!important;columns:3}
+.gmk-btns{display:none}
+.gmk-out{display:block!important;font-size:8.5pt;padding:1.5mm 3mm;margin-top:1.5mm}
+.story-media{position:static!important}
+.tryit{padding:4mm 5mm;margin-top:5mm;break-inside:avoid}
+.tryit .aims{display:none}
+.try-panel{display:block!important;margin-top:2mm}
+.try-panel h4{display:block;font:500 9pt var(--sans);margin:0 0 1mm}
+.try-panel dl{gap:2mm}.try-panel dl div{padding:2mm 3mm}.try-panel dd{font-size:9pt}
+.dotcard{display:none!important}
+.thumbs img{max-height:30mm}
+.thumbs figcaption{font-size:7.5pt}
+.without{background:#fff;color:var(--ink);border:1px solid var(--rule);padding:4mm 5mm;break-inside:avoid}
+.without p,.without li{color:var(--soft)}.without li b{color:var(--ink)}
+#agrifood .thumbs img,#daetox .thumbs img{max-height:24mm}#agrifood .story-img img{max-height:72mm}#agrifood .mini-list{font-size:7.8pt;columns:2;column-gap:6mm}#agrifood .chain li{font-size:9pt;padding-bottom:2mm}
+.back,.aim-status{display:none!important}
+.gmk-wrap{grid-template-columns:repeat(3,1fr);gap:2mm}
+.gmk-out{font-size:7.8pt;padding:1.5mm 2.5mm}
+.story-index{display:none}
